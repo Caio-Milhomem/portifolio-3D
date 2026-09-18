@@ -26,8 +26,10 @@ export function Model(props: React.JSX.IntrinsicElements["group"]) {
     "/models/character.glb",
   ) as unknown as GLTFResult;
   const { actions } = useAnimations(animations, group) as unknown as {
+    
     actions: GLTFActions;
   };
+
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
