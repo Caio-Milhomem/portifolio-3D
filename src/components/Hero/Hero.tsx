@@ -10,7 +10,7 @@ export default function Hero() {
         <ambientLight intensity={0.9} />
         <directionalLight color="white" position={[0, 5, 5]} />
         <pointLight position={[10, 10, 10]} />
-        <Model scale={3} position={[0, 0, 0]} />
+        <Model scale={3} position={[0, 0, 0]} followMouse={true} />
       </Canvas>
     </div>
   );
