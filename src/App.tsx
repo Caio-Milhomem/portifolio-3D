@@ -1,18 +1,28 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
-import Hero from './components/Hero/Hero'
+import { useCallback, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Hero from "./components/Hero/Hero";
+import { SideMenu } from "./components/SideMenu/SideMenu";
+
+const FORCE_LOADING = false;
+
+export default function App() {
+  const [heroReady, setHeroReady] = useState(false);
+
+  const handleHeroReady = useCallback(() => {
+    setHeroReady(true);
+  }, []);
 
   return (
     <>
-      <Hero/>
-    </>
-  )
-}
+      {heroReady && !FORCE_LOADING && <SideMenu />}
 
-export default App
+      <section id="inicio">
+        <Hero onReady={handleHeroReady} forceLoading={FORCE_LOADING} />
+      </section>
+
+      <section id="sobre">{/* Sobre */}</section>
+
+      <section id="projetos">{/* Projetos */}</section>
+    </>
+  );
+}

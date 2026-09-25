@@ -1,5 +1,6 @@
 import * as THREE from "three";
-import { useEffect, useState, type RefObject } from "react";
+import { useLayoutEffect, type RefObject } from "react";
+
 import { useAnimations } from "@react-three/drei";
 
 export type ActionName =
@@ -28,19 +29,62 @@ export function useCharacterAnimations(
   group: RefObject<THREE.Group | null>,
   activeAction: ActionName,
 ) {
-  const { actions } = useAnimations(animations, group) as unknown as {
+  const { actions, mixer } = useAnimations(animations, group) as unknown as {
     actions: GLTFActions;
+    mixer: THREE.AnimationMixer;
   };
 
-  console.log(actions);
+  /*
+   * useLayoutEffect acontece antes do navegador
+   * apresentar o frame visual.
+   *
+   * Isso ajuda a impedir que o boneco apareça
+   * primeiro na T-pose.
+   */
+  useLayoutEffect(() => {
+    const action = actions[activeAction];
 
-  useEffect(() => {
-    actions[activeAction]?.play();
+    if (!action) {
+      return;
+    }
+
+    /*
+     * Volta a animação para o início.
+     */
+    action.reset();
+
+    /*
+     * Garante que a animação esteja habilitada.
+     */
+    action.enabled = true;
+
+    /*
+     * Peso normal da animação.
+     */
+    action.setEffectiveWeight(1);
+
+    /*
+     * Velocidade normal.
+     */
+    action.setEffectiveTimeScale(1);
+
+    /*
+     * Começa a animação.
+     */
+    action.play();
+
+    /*
+     * Força o AnimationMixer a aplicar imediatamente
+     * a pose da animação ao esqueleto.
+     *
+     * Isso é importante para evitar um frame em T-pose.
+     */
+    mixer.update(0);
 
     return () => {
-      actions[activeAction]?.stop();
+      action.stop();
     };
-  }, [actions, activeAction]);
+  }, [actions, mixer, activeAction]);
 
   return actions;
 }

@@ -1,31 +1,20 @@
 import * as THREE from "three";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 
 export function useLookAtMouse(headBone: THREE.Bone, followMouse?: boolean) {
-  /*
-  useEffect(() => {
-    if (!headBone) return;
-    const helper = new THREE.AxesHelper(1); // tamanho 1 unidade
-    headBone.add(helper);
-  }, [headBone]);
-  */
   const headTargetPlane = useRef(
-    new THREE.Plane(new THREE.Vector3(0, 0, 1), -5),
+    new THREE.Plane(new THREE.Vector3(0, 0, 1), -3),
   );
 
   const mouseWorldPosition = useRef(new THREE.Vector3());
+
   const headWorldPosition = useRef(new THREE.Vector3());
 
   useFrame((state) => {
     if (!followMouse || !headBone) {
       return;
     }
-
-    state.raycaster.ray.intersectPlane(
-      headTargetPlane.current,
-      mouseWorldPosition.current,
-    );
 
     const intersection = state.raycaster.ray.intersectPlane(
       headTargetPlane.current,
@@ -34,8 +23,23 @@ export function useLookAtMouse(headBone: THREE.Bone, followMouse?: boolean) {
 
     if (intersection) {
       headBone.getWorldPosition(headWorldPosition.current);
+
+      // Aumenta o movimento para os lados
+      const horizontalSensitivity = 2.2;
+
+      mouseWorldPosition.current.x =
+        headWorldPosition.current.x +
+        (mouseWorldPosition.current.x - headWorldPosition.current.x) *
+          horizontalSensitivity;
+
+      // Aumenta o movimento para baixo
+      if (state.pointer.y < 0) {
+        mouseWorldPosition.current.y += state.pointer.y * 2;
+      }
+
       headBone.lookAt(mouseWorldPosition.current);
-      headBone.rotateY(-Math.PI / 2 - 0.3); // Ajuste de rotação para alinhar corretamente
+
+      headBone.rotateY(-Math.PI / 2 - 0.3);
     }
   });
 }
