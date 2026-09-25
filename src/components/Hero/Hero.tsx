@@ -2,7 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Environment } from "@react-three/drei";
 import { PCFShadowMap } from "three";
 import { Suspense, useCallback, useEffect, useState } from "react";
-
+import "./Hero.css";
 import { Model } from "./Model";
 import { TypingText3D } from "./TypingText3D";
 import { Loading3D } from "../Loading3D";
@@ -10,14 +10,16 @@ import { Loading3D } from "../Loading3D";
 type HeroProps = {
   onReady?: () => void;
   forceLoading?: boolean;
+  theme: "light" | "dark";
 };
 
 type HeroContentProps = {
   visible: boolean;
   onAssetsReady: () => void;
+  theme: "light" | "dark";
 };
 
-function HeroContent({ visible, onAssetsReady }: HeroContentProps) {
+function HeroContent({ visible, onAssetsReady, theme }: HeroContentProps) {
   useEffect(() => {
     onAssetsReady();
   }, [onAssetsReady]);
@@ -35,6 +37,7 @@ function HeroContent({ visible, onAssetsReady }: HeroContentProps) {
             "Sou gamer.",
           ]}
           speed={70}
+          color={theme === "dark" ? "#f5f5f5" : "#111111"}
         />
       </group>
 
@@ -49,7 +52,11 @@ function HeroContent({ visible, onAssetsReady }: HeroContentProps) {
   );
 }
 
-export default function Hero({ onReady, forceLoading = false }: HeroProps) {
+export default function Hero({
+  onReady,
+  forceLoading = false,
+  theme,
+}: HeroProps) {
   const [assetsReady, setAssetsReady] = useState(false);
 
   const [minimumLoadingDone, setMinimumLoadingDone] = useState(false);
@@ -99,22 +106,7 @@ export default function Hero({ onReady, forceLoading = false }: HeroProps) {
   }, [showHero, onReady]);
 
   return (
-    <div
-      className="hero"
-      style={{
-        width: "100%",
-        height: "100vh",
-
-        background: `
-          linear-gradient(
-            180deg,
-            #f8fafc 0%,
-            #e5e8ec 55%,
-            #717474 100%
-          )
-        `,
-      }}
-    >
+    <div className="hero">
       <Canvas
         shadows={{
           type: PCFShadowMap,
@@ -154,7 +146,11 @@ export default function Hero({ onReady, forceLoading = false }: HeroProps) {
 
         {!forceLoading && (
           <Suspense fallback={null}>
-            <HeroContent visible={showHero} onAssetsReady={handleAssetsReady} />
+            <HeroContent
+              visible={showHero}
+              onAssetsReady={handleAssetsReady}
+              theme={theme}
+            />
           </Suspense>
         )}
 

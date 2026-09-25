@@ -5,9 +5,14 @@ import { useTypingLoop } from "../../hooks/useTypingLoop";
 type TypingText3DProps = {
   phrases: string[];
   speed?: number;
+  color?: string;
 };
 
-export function TypingText3D({ phrases, speed = 70 }: TypingText3DProps) {
+export function TypingText3D({
+  phrases,
+  speed = 70,
+  color = "#111111",
+}: TypingText3DProps) {
   const visibleText = useTypingLoop(phrases, speed);
 
   const [showCursor, setShowCursor] = useState(true);
@@ -33,7 +38,7 @@ export function TypingText3D({ phrases, speed = 70 }: TypingText3DProps) {
       {visibleText}
       {showCursor ? "|" : " "}
 
-      <meshStandardMaterial color="black" roughness={0.7} metalness={0} />
+      <meshStandardMaterial color={color} roughness={0.7} metalness={0} />
     </Text3D>
   );
 }

@@ -5,3 +5,151 @@ body,
   width: 100%;
   margin: 0;
 }
+
+.app {
+  --hero-background: linear-gradient(
+    180deg,
+    #f8fafc 0%,
+    #e5e8ec 55%,
+    #717474 100%
+  );
+
+  width: 100%;
+  min-height: 100vh;
+
+  transition: background 0.4s ease;
+}
+
+.app[data-theme="dark"] {
+  --hero-background: linear-gradient(
+    180deg,
+    #1f2329 0%,
+    #171a1f 55%,
+    #0d0f12 100%
+  );
+}
+
+.theme-icon-wrapper {
+  position: relative;
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle {
+  position: fixed;
+
+  top: 24px;
+  right: 24px;
+  left: auto;
+
+  z-index: 9999;
+
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  margin: 0;
+
+  border-radius: 50%;
+
+  outline: none;
+
+  appearance: none;
+
+  -webkit-appearance: none;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+/* LUA */
+.app[data-theme="light"] .theme-toggle {
+  background: #ffffff;
+  border: 2px solid #111111;
+  color: #111111;
+}
+
+/* SOL */
+.app[data-theme="dark"] .theme-toggle {
+  background: #111111;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.06);
+}
+
+.app[data-theme="dark"] .moon-icon {
+  opacity: 0;
+
+  transform: translate(-50%, -50%) translate(3px, -2px) scale(0.6) rotate(90deg);
+}
+
+.app[data-theme="dark"] .moon-icon::after {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.app[data-theme="dark"] .sun-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.moon-icon {
+  position: absolute;
+
+  top: 45%;
+  left: 80%;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  box-shadow: -10px 3px 0 0 #111111;
+
+  opacity: 1;
+
+  transform: translate(-50%, -50%) translate(3px, -2px) scale(1) rotate(0deg);
+
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.sun-icon {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+
+  font-size: 40px;
+  line-height: 1;
+
+  opacity: 0;
+
+  transform: scale(0.6) rotate(-90deg);
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
