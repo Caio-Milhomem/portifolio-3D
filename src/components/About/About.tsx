@@ -12,12 +12,15 @@ type AboutTab = {
   title: string;
   modelPath: string;
   text: string;
+  icon?: string;
+  image?: string;
 };
 
 const tabs: AboutTab[] = [
   {
     id: "skate",
     title: "Skate",
+    icon: "🛹",
     modelPath: "/models/skate.glb",
     text: `
       O skate faz parte da minha vida e representa muito da forma
@@ -25,6 +28,22 @@ const tabs: AboutTab[] = [
 
       É algo que exige prática, tentativa, erro e repetição até que
       aquilo que parecia difícil comece a se tornar natural.
+    `,
+  },
+  {
+    id: "gamer",
+    title: "Gamer",
+    icon: "🎮",
+    modelPath: "/models/controller.glb",
+    text: `
+      Games são uma das formas que encontro para me divertir,
+      explorar novos mundos e viver experiências diferentes.
+
+      Além da diversão, gosto especialmente da combinação entre
+      desafio, estratégia, evolução e tecnologia que os jogos proporcionam.
+
+      É um universo que também alimenta minha curiosidade por tecnologia,
+      design e pela forma como experiências digitais são construídas.
     `,
   },
 ];
@@ -45,7 +64,11 @@ export function About() {
               className={`about-tab ${activeTab === tab.id ? "active" : ""}`}
               onClick={() => setActiveTab(tab.id)}
             >
-              <AboutTabIcon modelPath={tab.modelPath} />
+              {tab.image ? (
+                <img src={tab.image} alt="" className="about-tab-image" />
+              ) : (
+                <span className="about-tab-icon">{tab.icon}</span>
+              )}
 
               <span>{tab.title}</span>
             </button>
@@ -65,6 +88,11 @@ export function About() {
       {/* Display 3D */}
       <div className="about-display">
         <Canvas
+          dpr={1}
+          gl={{
+            antialias: false,
+            powerPreference: "high-performance",
+          }}
           camera={{
             position: [0, 0, 6],
             fov: 45,

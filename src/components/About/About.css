@@ -84,12 +84,13 @@
 ========================= */
 
 .about-tab-icon {
-  width: 42px;
-  height: 42px;
+  font-size: 24px;
+}
 
-  flex-shrink: 0;
-
-  pointer-events: none;
+.about-tab-image {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 /* =========================
