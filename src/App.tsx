@@ -3,6 +3,7 @@ import "./App.css";
 import Hero from "./components/Hero/Hero";
 import { SideMenu } from "./components/SideMenu/SideMenu";
 import { HelpButton } from "./components/HelpButton/HelpButton";
+import { About } from "./components/About/About";
 
 const FORCE_LOADING = false; // trava na tela de loading se true
 
@@ -62,8 +63,8 @@ export default function App() {
       content: (
         <>
           <p>
-            Use o menu lateral para navegar pelas diferentes áreas do portfólio
-            ou role a página.
+            Use o menu na lateral esquerda {"(>)"} para navegar pelas diferentes
+            áreas do portfólio ou role a página.
           </p>
 
           <p>
@@ -71,7 +72,7 @@ export default function App() {
             claro e escuro.
           </p>
 
-          <p>O personagem acompanha o movimento do mouse.</p>
+          <p>Clique no personagem para abrir o menu de animações.</p>
         </>
       ),
     },
@@ -148,7 +149,9 @@ export default function App() {
         />
       </section>
 
-      <section id="sobre">{/* Sobre */}</section>
+      <section id="sobre">
+        <About />
+      </section>
 
       <section id="projetos">{/* Projetos */}</section>
     </main>
