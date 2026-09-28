@@ -1,4 +1,5 @@
 import * as THREE from "three";
+
 import { useLayoutEffect, type RefObject } from "react";
 
 import { useAnimations } from "@react-three/drei";
@@ -28,63 +29,69 @@ export function useCharacterAnimations(
   animations: THREE.AnimationClip[],
   group: RefObject<THREE.Group | null>,
   activeAction: ActionName,
+  onAnimationFinished?: () => void,
 ) {
   const { actions, mixer } = useAnimations(animations, group) as unknown as {
     actions: GLTFActions;
     mixer: THREE.AnimationMixer;
   };
 
-  /*
-   * useLayoutEffect acontece antes do navegador
-   * apresentar o frame visual.
-   *
-   * Isso ajuda a impedir que o boneco apareça
-   * primeiro na T-pose.
-   */
   useLayoutEffect(() => {
     const action = actions[activeAction];
 
-    if (!action) {
-      return;
-    }
+    if (!action) return;
 
-    /*
-     * Volta a animação para o início.
-     */
+    const isIdle = activeAction === "idle.001";
+
     action.reset();
-
-    /*
-     * Garante que a animação esteja habilitada.
-     */
     action.enabled = true;
 
-    /*
-     * Peso normal da animação.
-     */
     action.setEffectiveWeight(1);
-
-    /*
-     * Velocidade normal.
-     */
     action.setEffectiveTimeScale(1);
 
     /*
-     * Começa a animação.
+     * IDLE
      */
-    action.play();
+    if (isIdle) {
+      action.setLoop(THREE.LoopRepeat, Infinity);
+
+      action.clampWhenFinished = false;
+    } else {
 
     /*
-     * Força o AnimationMixer a aplicar imediatamente
-     * a pose da animação ao esqueleto.
-     *
-     * Isso é importante para evitar um frame em T-pose.
+     * EMOTES
+     */
+      action.setLoop(THREE.LoopOnce, 1);
+
+      action.clampWhenFinished = true;
+    }
+
+    action.fadeIn(0.2).play();
+
+    /*
+     * Aplica imediatamente a pose.
+     * Evita flash de T-pose.
      */
     mixer.update(0);
 
+    function handleFinished(
+      event: THREE.Event & {
+        action: THREE.AnimationAction;
+      },
+    ) {
+      if (event.action === action && !isIdle) {
+        onAnimationFinished?.();
+      }
+    }
+
+    mixer.addEventListener("finished", handleFinished);
+
     return () => {
-      action.stop();
+      mixer.removeEventListener("finished", handleFinished);
+
+      action.fadeOut(0.15);
     };
-  }, [actions, mixer, activeAction]);
+  }, [actions, mixer, activeAction, onAnimationFinished]);
 
   return actions;
 }

@@ -1,0 +1,97 @@
+.emote-menu {
+  position: absolute;
+
+  top: 50%;
+  right: 110px;
+
+  transform: translateY(-50%);
+
+  z-index: 5000;
+
+  width: 280px;
+
+  padding: 16px;
+
+  border: 2px solid #111111;
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.1);
+  color: #111111;
+
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+
+  animation: emoteMenuEnter 0.2s ease;
+}
+
+.emote-menu-title {
+  margin-bottom: 12px;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.emote-menu-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 8px;
+}
+
+.emote-option {
+  padding: 9px 10px;
+
+  border: 1px solid #cccccc;
+  border-radius: 7px;
+
+  background: transparent;
+  color: inherit;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.emote-option:hover {
+  background: rgba(0, 0, 0, 0.08);
+
+  transform: translateY(-1px);
+}
+
+/* DARK */
+
+.app[data-theme="dark"] .emote-menu {
+  background: rgba(17, 17, 17, 0.94);
+  color: #ffffff;
+
+  border-color: #7a7878;
+}
+
+.app[data-theme="dark"] .emote-option {
+  border-color: #444444;
+}
+
+.app[data-theme="dark"] .emote-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes emoteMenuEnter {
+  from {
+    opacity: 0;
+
+    transform: translateY(-50%) translateX(10px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+}

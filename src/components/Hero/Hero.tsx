@@ -3,9 +3,13 @@ import { ContactShadows, Environment } from "@react-three/drei";
 import { PCFShadowMap } from "three";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import "./Hero.css";
+
 import { Model } from "./Model";
 import { TypingText3D } from "./TypingText3D";
 import { Loading3D } from "../Loading3D";
+import { EmoteMenu } from "../EmoteMenu/EmoteMenu";
+
+import type { ActionName } from "../../hooks/useCharacterAnimations";
 
 type HeroProps = {
   onReady?: () => void;
@@ -16,10 +20,20 @@ type HeroProps = {
 type HeroContentProps = {
   visible: boolean;
   onAssetsReady: () => void;
+  activeAction: ActionName;
+  onModelClick: () => void;
+  onAnimationFinished: () => void;
   theme: "light" | "dark";
 };
 
-function HeroContent({ visible, onAssetsReady, theme }: HeroContentProps) {
+function HeroContent({
+  visible,
+  onAssetsReady,
+  activeAction,
+  onModelClick,
+  onAnimationFinished,
+  theme,
+}: HeroContentProps) {
   useEffect(() => {
     onAssetsReady();
   }, [onAssetsReady]);
@@ -45,8 +59,11 @@ function HeroContent({ visible, onAssetsReady, theme }: HeroContentProps) {
       <Model
         scale={2}
         position={[4, -1, 0]}
-        followMouse
         rotation={[0, -0.4, 0]}
+        activeAction={activeAction}
+        followMouse={activeAction === "idle.001"}
+        onModelClick={onModelClick}
+        onAnimationFinished={onAnimationFinished}
       />
     </group>
   );
@@ -61,11 +78,12 @@ export default function Hero({
 
   const [minimumLoadingDone, setMinimumLoadingDone] = useState(false);
 
+  const [emoteMenuOpen, setEmoteMenuOpen] = useState(false);
+
+  const [activeAction, setActiveAction] = useState<ActionName>("idle.001");
+
   /*
    * Tempo mínimo do loading.
-   *
-   * Mesmo que os arquivos estejam em cache e carreguem
-   * instantaneamente, o loader ficará visível por 1.2s.
    */
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -76,28 +94,39 @@ export default function Hero({
   }, []);
 
   /*
-   * É executado somente depois que HeroContent conseguiu
-   * montar dentro do Suspense.
-   *
-   * Ou seja: Model + fonte do Text3D já carregaram.
+   * Assets terminaram de carregar.
    */
   const handleAssetsReady = useCallback(() => {
     setAssetsReady(true);
   }, []);
 
   /*
-   * O Hero só aparece quando:
+   * Seleciona um emote e fecha o menu.
+   */
+  function handleEmoteSelect(action: ActionName) {
+    setActiveAction(action);
+    setEmoteMenuOpen(false);
+  }
+
+  /*
+   * Quando o emote termina,
+   * volta para idle.
+   */
+  const handleAnimationFinished = useCallback(() => {
+    setActiveAction("idle.001");
+  }, []);
+
+  /*
+   * Hero só aparece quando:
    *
-   * 1. Os assets carregaram.
-   * 2. O tempo mínimo do loading terminou.
+   * 1. Assets carregaram.
+   * 2. Tempo mínimo terminou.
+   * 3. forceLoading está desligado.
    */
   const showHero = assetsReady && minimumLoadingDone && !forceLoading;
 
   /*
-   * Só avisa o App que o Hero está pronto quando
-   * ele realmente puder aparecer.
-   *
-   * É daqui que o SideMenu poderá ser liberado.
+   * Avisa o App quando o Hero estiver pronto.
    */
   useEffect(() => {
     if (!showHero) return;
@@ -108,6 +137,9 @@ export default function Hero({
   return (
     <div className="hero">
       <Canvas
+        onPointerMissed={() => {
+          setEmoteMenuOpen(false);
+        }}
         shadows={{
           type: PCFShadowMap,
         }}
@@ -135,14 +167,7 @@ export default function Hero({
 
         <Environment preset="studio" environmentIntensity={0.15} />
 
-        {/* 
-          Os assets são carregados aqui.
-
-          Enquanto estiverem carregando,
-          o Suspense simplesmente não renderiza HeroContent.
-
-          O loader é controlado separadamente.
-        */}
+        {/* Conteúdo */}
 
         {!forceLoading && (
           <Suspense fallback={null}>
@@ -150,6 +175,11 @@ export default function Hero({
               visible={showHero}
               onAssetsReady={handleAssetsReady}
               theme={theme}
+              activeAction={activeAction}
+              onModelClick={() => {
+                setEmoteMenuOpen((prev) => !prev);
+              }}
+              onAnimationFinished={handleAnimationFinished}
             />
           </Suspense>
         )}
@@ -164,6 +194,9 @@ export default function Hero({
           rotation={[-Math.PI / 2, 0, 0]}
           position={[0, -1, 0]}
           receiveShadow
+          onClick={() => {
+            setEmoteMenuOpen(false);
+          }}
         >
           <planeGeometry args={[100, 100]} />
 
@@ -180,6 +213,10 @@ export default function Hero({
           far={10}
         />
       </Canvas>
+
+      {/* Menu de animações */}
+
+      {emoteMenuOpen && <EmoteMenu onSelect={handleEmoteSelect} />}
     </div>
   );
 }

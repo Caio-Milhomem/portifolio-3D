@@ -7,7 +7,10 @@ import React, { useRef, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import { type GLTF } from "three-stdlib";
 import { useLookAtMouse } from "../../hooks/useLookAtMouse";
-import { useCharacterAnimations } from "../../hooks/useCharacterAnimations";
+import {
+  useCharacterAnimations,
+  type ActionName,
+} from "../../hooks/useCharacterAnimations";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -22,9 +25,21 @@ type GLTFResult = GLTF & {
 
 type ModelProps = React.JSX.IntrinsicElements["group"] & {
   followMouse?: boolean;
+
+  activeAction?: ActionName;
+
+  onModelClick?: () => void;
+
+  onAnimationFinished?: () => void;
 };
 
-export function Model(props: ModelProps) {
+export function Model({
+  followMouse = true,
+  activeAction = "idle.001",
+  onModelClick,
+  onAnimationFinished,
+  ...props
+}: ModelProps) {
   const group = useRef<THREE.Group>(null);
 
   const { nodes, materials, animations } = useGLTF(
@@ -45,12 +60,20 @@ export function Model(props: ModelProps) {
     material.needsUpdate = true;
   }, [materials]);
 
-  useCharacterAnimations(animations, group, "idle.001");
+  useCharacterAnimations(animations, group, activeAction, onAnimationFinished);
 
-  useLookAtMouse(nodes.mixamorigHead, props.followMouse);
+  useLookAtMouse(nodes.mixamorigHead, followMouse);
 
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group
+      ref={group}
+      {...props}
+      dispose={null}
+      onClick={(event) => {
+        event.stopPropagation();
+        onModelClick?.();
+      }}
+    >
       <group name="Scene">
         <group name="Armature">
           <skinnedMesh
