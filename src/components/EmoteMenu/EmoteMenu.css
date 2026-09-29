@@ -46,7 +46,7 @@
   border: 1px solid #cccccc;
   border-radius: 7px;
 
-  background: transparent;
+  background: rgba(255, 255, 255, 0.85);
   color: inherit;
 
   font-family: inherit;
@@ -75,11 +75,13 @@
 }
 
 .app[data-theme="dark"] .emote-option {
-  border-color: #444444;
+  background: rgba(35, 35, 35, 0.9);
+
+  border-color: #555555;
 }
 
 .app[data-theme="dark"] .emote-option:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.247);
 }
 
 @keyframes emoteMenuEnter {

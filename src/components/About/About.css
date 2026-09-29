@@ -1,33 +1,63 @@
 .about {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  align-items: center;
-
-  padding: 80px 8%;
+  grid-template-columns: 50% 50%;
 
   box-sizing: border-box;
 
   background: var(--hero-background);
   color: #111111;
 
+  overflow: hidden;
+  overflow-anchor: none;
+
   transition:
     background 0.4s ease,
     color 0.4s ease;
 }
+.about-model-placeholder {
+  width: 100%;
+  height: 100%;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-model-placeholder span {
+  font-size: 120px;
+}
+
+.about-model-placeholder img {
+  width: 50%;
+  max-width: 300px;
+  height: auto;
+
+  object-fit: contain;
+}
 /* =========================
    ESQUERDA
 ========================= */
 
 .about-left {
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  padding: 70px 8%;
+
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
 
-  gap: 50px;
+  gap: 40px;
+
+  overflow: hidden;
 }
 
 /* =========================
@@ -36,23 +66,30 @@
 
 .about-tabs {
   display: flex;
-  align-items: center;
+  align-items: stretch;
 
   gap: 14px;
+
+  flex-shrink: 0;
 }
 
 .about-tab {
-  min-width: 110px;
+  width: 120px;
   height: 72px;
+
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
+  justify-content: center;
 
   gap: 8px;
 
   padding: 8px 14px;
 
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+
+  border: 1px solid rgba(20, 20, 20, 0.45);
   border-radius: 12px;
 
   background: transparent;
@@ -63,20 +100,28 @@
   cursor: pointer;
 
   transition:
-    background 0.2s ease,
+    box-shadow 0.2s ease,
     border-color 0.2s ease,
     transform 0.2s ease;
 }
 
 .about-tab:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
-.about-tab.active {
-  background: #111111;
-  color: #ffffff;
+/* ABA SELECIONADA */
 
-  border-color: #111111;
+.about-tab.active {
+  background: transparent;
+
+  border-color: #161616;
+
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 4px 0 #171717,
+    0 8px 0 #242424,
+    0 12px 18px rgba(248, 250, 249, 0.664);
 }
 
 /* =========================
@@ -98,7 +143,17 @@
 ========================= */
 
 .about-text {
+  width: 100%;
   max-width: 580px;
+
+  min-height: 0;
+
+  flex: 1;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-right: 12px;
 }
 
 .about-eyebrow {
@@ -106,7 +161,7 @@
 
   margin-bottom: 12px;
 
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
 
   letter-spacing: 0.18em;
@@ -139,11 +194,22 @@
 
 .about-display {
   width: 100%;
-  height: 70vh;
+  height: 100%;
 
-  min-height: 500px;
+  min-width: 0;
+  min-height: 0;
+
+  position: relative;
+
+  overflow: hidden;
 }
 
+.about-display canvas {
+  width: 100% !important;
+  height: 100% !important;
+
+  display: block;
+}
 /* =========================
    DARK MODE
 ========================= */
@@ -161,6 +227,21 @@
   color: #111111;
 
   border-color: #ffffff;
+}
+/* =========================
+   LIGHT MODE
+========================= */
+
+.app[data-theme="light"] .about-tab.active {
+  background: transparent;
+
+  border-color: #3a3a3a;
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 3px 0 #f1f0f0a1,
+    +3px 10px 10px rgba(0, 0, 0, 0.541);
 }
 
 /* =========================

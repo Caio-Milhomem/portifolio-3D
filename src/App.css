@@ -153,3 +153,16 @@ body,
     opacity 0.35s ease,
     transform 0.35s ease;
 }
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+
+section {
+  width: 100%;
+  min-height: 100vh;
+
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}

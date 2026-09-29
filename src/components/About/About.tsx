@@ -48,6 +48,8 @@ const tabs: AboutTab[] = [
   },
 ];
 
+const ENABLE_3D_MODELS = false;
+
 export function About() {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
 
@@ -60,6 +62,7 @@ export function About() {
         <div className="about-tabs">
           {tabs.map((tab) => (
             <button
+              type="button"
               key={tab.id}
               className={`about-tab ${activeTab === tab.id ? "active" : ""}`}
               onClick={() => setActiveTab(tab.id)}
@@ -85,28 +88,39 @@ export function About() {
         </div>
       </div>
 
-      {/* Display 3D */}
+      {/* Display */}
       <div className="about-display">
-        <Canvas
-          dpr={1}
-          gl={{
-            antialias: false,
-            powerPreference: "high-performance",
-          }}
-          camera={{
-            position: [0, 0, 6],
-            fov: 45,
-          }}
-        >
-          <ambientLight intensity={0.7} />
+        {ENABLE_3D_MODELS ? (
+          <Canvas
+            dpr={1}
+            gl={{
+              antialias: false,
+              powerPreference: "high-performance",
+            }}
+            camera={{
+              position: [0, 0, 6],
+              fov: 45,
+            }}
+          >
+            <ambientLight intensity={0.7} />
 
-          <directionalLight position={[-4, 6, 5]} intensity={1.2} />
+            <directionalLight position={[-4, 6, 5]} intensity={1.2} />
 
-          <Environment preset="studio" environmentIntensity={0.4} />
+            <Environment preset="studio" environmentIntensity={0.4} />
 
-          <AboutModel modelPath={selectedTab.modelPath} />
-          <OrbitControls />
-        </Canvas>
+            <AboutModel modelPath={selectedTab.modelPath} />
+
+            <OrbitControls />
+          </Canvas>
+        ) : (
+          <div className="about-model-placeholder">
+            {selectedTab.image ? (
+              <img src={selectedTab.image} alt={selectedTab.title} />
+            ) : (
+              <span>{selectedTab.icon}</span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
