@@ -18,9 +18,9 @@ type AboutTab = {
 
 const tabs: AboutTab[] = [
   {
-    id: "skate",
-    title: "Skate",
-    icon: "🛹",
+    id: "computacao",
+    title: "Computação",
+    icon: "💻",
     modelPath: "/models/skate.glb",
     text: `
       O skate faz parte da minha vida e representa muito da forma
@@ -28,11 +28,18 @@ const tabs: AboutTab[] = [
 
       É algo que exige prática, tentativa, erro e repetição até que
       aquilo que parecia difícil comece a se tornar natural.
+
+      skate skate skate skate skate skate skate skate skate
+      skate skate skate skate skateskate skate skate skate skate
+      skate skate skate skate skateskate skate skate skate skate skate skate skate skate skateskate skate skate skate skateskate skate skate skate skate
+      skate skate skate skate skateskate skate skate skate skateskate skate skate skate skateskate skate skate skate skateskate skate skate skate skate
+      skate skate skate skate skateskate skate skate skate skate
+
     `,
   },
   {
-    id: "gamer",
-    title: "Gamer",
+    id: "jogos",
+    title: "Jogos",
     icon: "🎮",
     modelPath: "/models/controller.glb",
     text: `
@@ -44,6 +51,26 @@ const tabs: AboutTab[] = [
 
       É um universo que também alimenta minha curiosidade por tecnologia,
       design e pela forma como experiências digitais são construídas.
+    `,
+  },
+  {
+    id: "skate",
+    title: "Skate",
+    icon: "🛹",
+    modelPath: "/models/skate.glb",
+    text: `
+      O skate faz parte da minha vida e representa muito da forma
+      como encaro aprendizado, evolução e persistência.
+
+      É algo que exige prática, tentativa, erro e repetição até que
+      aquilo que parecia difícil comece a se tornar natural.
+
+      skate skate skate skate skate skate skate skate skate
+      skate skate skate skate skateskate skate skate skate skate
+      skate skate skate skate skateskate skate skate skate skate skate skate skate skate skateskate skate skate skate skateskate skate skate skate skate
+      skate skate skate skate skateskate skate skate skate skateskate skate skate skate skateskate skate skate skate skateskate skate skate skate skate
+      skate skate skate skate skateskate skate skate skate skate
+
     `,
   },
 ];
@@ -80,11 +107,15 @@ export function About() {
 
         {/* Conteúdo */}
         <div className="about-text">
-          <span className="about-eyebrow">SOBRE MIM</span>
+          <div className="about-text-header">
+            <span className="about-eyebrow">SOBRE MIM</span>
 
-          <h2>{selectedTab.title}</h2>
+            <h2>{selectedTab.title}</h2>
+          </div>
 
-          <p>{selectedTab.text}</p>
+          <div className="about-text-content">
+            <p>{selectedTab.text}</p>
+          </div>
         </div>
       </div>
 

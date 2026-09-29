@@ -149,11 +149,17 @@ export default function App() {
         />
       </section>
 
-      <section id="sobre">
-        <About />
-      </section>
+      {heroReady && !FORCE_LOADING && (
+        <>
+          <section id="sobre">
+            <About />
+          </section>
 
-      <section id="projetos">{/* Projetos */}</section>
+          <section id="projetos">{/* Projetos */}</section>
+
+          <section id="contato">{/* Contato */}</section>
+        </>
+      )}
     </main>
   );
 }
