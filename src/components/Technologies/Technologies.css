@@ -1,0 +1,241 @@
+.technologies {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+
+  overflow: hidden;
+
+  background: var(--hero-background);
+  color: #111111;
+
+  transition:
+    background 0.4s ease,
+    color 0.4s ease;
+}
+
+/* ==============================
+   CENA
+============================== */
+
+.technologies-scene {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+/* ==============================
+   ÍCONES EM ÓRBITA
+============================== */
+
+.technology-orbit-icon {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px;
+
+  border: 2px solid rgba(20, 20, 20, 0.7);
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.technology-orbit-icon:hover {
+  transform: scale(1.12);
+
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.technology-orbit-icon.active {
+  transform: scale(1.15);
+
+  border-color: #111111;
+
+  box-shadow:
+    0 4px 0 #222222,
+    0 8px 14px rgba(0, 0, 0, 0.25);
+}
+
+.technology-orbit-icon img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  pointer-events: none;
+}
+
+/* ==============================
+   PAINEL DIREITO
+============================== */
+
+.technology-card {
+  position: absolute;
+
+  top: 50%;
+  right: 7%;
+
+  width: min(420px, 36vw);
+  max-height: 72vh;
+
+  transform: translateY(-50%);
+
+  box-sizing: border-box;
+
+  padding: 34px 34px 30px;
+
+  border: 1px solid rgba(20, 20, 20, 0.25);
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.92);
+  color: #111111;
+
+  backdrop-filter: blur(12px);
+
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+
+  overflow: hidden;
+
+  animation: technologyCardEnter 0.35s ease;
+}
+
+.technology-card.open {
+  opacity: 1;
+
+  transform: translateX(0);
+
+  pointer-events: auto;
+}
+
+/* ==============================
+   CABEÇALHO
+============================== */
+
+.technology-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  margin-bottom: 28px;
+}
+
+.technology-card-header img {
+  width: 92px;
+  height: 92px;
+
+  object-fit: contain;
+
+  margin-bottom: 16px;
+}
+
+.technology-card-header h2 {
+  margin: 0;
+
+  font-size: 38px;
+  line-height: 1;
+}
+
+/* ==============================
+   TEXTO
+============================== */
+
+.technology-card-text {
+  max-height: 42vh;
+
+  overflow-y: auto;
+
+  padding-right: 8px;
+}
+
+.technology-card-text p {
+  margin: 0;
+
+  white-space: pre-line;
+
+  font-size: 17px;
+  line-height: 1.7;
+
+  opacity: 0.84;
+}
+
+/* ==============================
+   FECHAR
+============================== */
+
+.technology-close {
+  position: absolute;
+
+  top: 30px;
+  right: 35px;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+  color: inherit;
+
+  font-family: inherit;
+  font-size: 30px;
+
+  cursor: pointer;
+}
+
+.technology-card {
+  z-index: 6;
+}
+
+/* ==============================
+   DARK MODE
+============================== */
+
+.app[data-theme="dark"] .technologies {
+  color: #f5f5f5;
+}
+
+.app[data-theme="dark"] .technology-orbit-icon {
+  background: rgba(20, 20, 20, 0.92);
+
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+.app[data-theme="dark"] .technology-orbit-icon.active {
+  border-color: #ffffff;
+
+  box-shadow:
+    0 4px 0 #111111,
+    0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes technologyCardEnter {
+  from {
+    opacity: 0;
+
+    transform: translateY(-50%) translateX(30px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+}

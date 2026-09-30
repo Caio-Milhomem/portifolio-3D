@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { useLayoutEffect, type RefObject } from "react";
+import { useLayoutEffect } from "react";
 
 import { useAnimations } from "@react-three/drei";
 
@@ -27,11 +27,15 @@ type GLTFActions = Record<ActionName, THREE.AnimationAction>;
 
 export function useCharacterAnimations(
   animations: THREE.AnimationClip[],
-  group: RefObject<THREE.Group | null>,
+  root: THREE.Object3D,
   activeAction: ActionName,
   onAnimationFinished?: () => void,
 ) {
-  const { actions, mixer } = useAnimations(animations, group) as unknown as {
+  /*
+   * O mixer agora é criado diretamente
+   * sobre a instância clonada do personagem.
+   */
+  const { actions, mixer } = useAnimations(animations, root) as unknown as {
     actions: GLTFActions;
     mixer: THREE.AnimationMixer;
   };
@@ -44,9 +48,11 @@ export function useCharacterAnimations(
     const isIdle = activeAction === "idle.001";
 
     action.reset();
+
     action.enabled = true;
 
     action.setEffectiveWeight(1);
+
     action.setEffectiveTimeScale(1);
 
     /*
@@ -69,8 +75,8 @@ export function useCharacterAnimations(
     action.fadeIn(0.2).play();
 
     /*
-     * Aplica imediatamente a pose.
-     * Evita flash de T-pose.
+     * Força a primeira pose imediatamente
+     * para evitar flash de T-pose.
      */
     mixer.update(0);
 

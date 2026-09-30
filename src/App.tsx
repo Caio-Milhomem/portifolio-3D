@@ -4,12 +4,13 @@ import Hero from "./components/Hero/Hero";
 import { SideMenu } from "./components/SideMenu/SideMenu";
 import { HelpButton } from "./components/HelpButton/HelpButton";
 import { About } from "./components/About/About";
+import { Technologies } from "./components/Technologies/Technologies";
 
 const FORCE_LOADING = false; // trava na tela de loading se true
 
 type Theme = "light" | "dark";
 
-type SectionName = "inicio" | "sobre" | "projetos" | "contato";
+type SectionName = "inicio" | "sobre" | "tecnologias" | "contato";
 
 export default function App() {
   const [heroReady, setHeroReady] = useState(false);
@@ -89,16 +90,16 @@ export default function App() {
       ),
     },
 
-    projetos: {
-      title: "Projetos",
+    tecnologias: {
+      title: "Tecnologias",
       content: (
         <>
           <p>
-            Explore os projetos para conhecer algumas das soluções que
+            Explore as tecnologias para conhecer algumas das soluções que
             desenvolvi.
           </p>
 
-          <p>Clique em um projeto para visualizar mais detalhes.</p>
+          <p>Clique em uma tecnologia para visualizar mais detalhes.</p>
         </>
       ),
     },
@@ -146,6 +147,7 @@ export default function App() {
           onReady={handleHeroReady}
           forceLoading={FORCE_LOADING}
           theme={theme}
+          isActive={activeSection === "inicio"}
         />
       </section>
 
@@ -155,7 +157,9 @@ export default function App() {
             <About />
           </section>
 
-          <section id="projetos">{/* Projetos */}</section>
+          <section id="tecnologias">
+            <Technologies isActive={activeSection === "tecnologias"} />
+          </section>
 
           <section id="contato">{/* Contato */}</section>
         </>

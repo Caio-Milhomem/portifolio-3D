@@ -40,8 +40,8 @@ export function SideMenu() {
               <span>&gt;</span> sobre
             </button>
 
-            <button onClick={() => scrollToSection("projetos")}>
-              <span>&gt;</span> projetos
+            <button onClick={() => scrollToSection("tecnologias")}>
+              <span>&gt;</span> tecnologias
             </button>
 
             <button onClick={() => scrollToSection("contato")}>

@@ -15,6 +15,7 @@ type HeroProps = {
   onReady?: () => void;
   forceLoading?: boolean;
   theme: "light" | "dark";
+  isActive: boolean;
 };
 
 type HeroContentProps = {
@@ -73,6 +74,7 @@ export default function Hero({
   onReady,
   forceLoading = false,
   theme,
+  isActive,
 }: HeroProps) {
   const [assetsReady, setAssetsReady] = useState(false);
 
