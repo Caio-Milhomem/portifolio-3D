@@ -16,22 +16,182 @@ import { Model } from "../Hero/Model";
 
 import "./Technologies.css";
 
+import { TechnologyIconPNG } from "./TechnologyIconPNG";
+
 type Technology = {
   id: string;
   name: string;
   icon: string;
   icon3D: string;
   text: string;
-  color: string;
 };
 
 const technologies: Technology[] = [
   {
+    id: "azure",
+    name: "Azure",
+    icon: "/icons/azure-icon.svg",
+    icon3D: "/icons/azure-icon.png",
+    text: `
+Descreva aqui sua experiência com Azure.
+  `,
+  },
+
+  {
+    id: "bootstrap",
+    name: "Bootstrap",
+    icon: "/icons/bootstrap-icon.png",
+    icon3D: "/icons/bootstrap-icon.png",
+    text: `
+Descreva aqui sua experiência com Bootstrap.
+  `,
+  },
+
+  {
+    id: "cpp",
+    name: "C++",
+    icon: "/icons/cpp-icon.svg",
+    icon3D: "/icons/cpp-icon.svg",
+    text: `
+Descreva aqui sua experiência com C++.
+    `,
+  },
+
+  {
+    id: "css",
+    name: "CSS",
+    icon: "/icons/css-icon.svg",
+    icon3D: "/icons/css-icon.svg",
+    text: `
+Descreva aqui sua experiência com CSS.
+    `,
+  },
+
+  {
+    id: "docker",
+    name: "Docker",
+    icon: "/icons/docker-icon.svg",
+    icon3D: "/icons/docker-icon.svg",
+    text: `
+Descreva aqui sua experiência com Docker.
+    `,
+  },
+
+  {
+    id: "git",
+    name: "Git",
+    icon: "/icons/git-icon.svg",
+    icon3D: "/icons/git-icon.svg",
+    text: `
+Descreva aqui sua experiência com Git.
+    `,
+  },
+
+  {
+    id: "github",
+    name: "GitHub",
+    icon: "/icons/github-icon.svg",
+    icon3D: "/icons/github-icon.svg",
+    text: `
+Descreva aqui sua experiência com GitHub.
+    `,
+  },
+
+  {
+    id: "html",
+    name: "HTML",
+    icon: "/icons/html-icon.svg",
+    icon3D: "/icons/html-icon.svg",
+    text: `
+Descreva aqui sua experiência com HTML.
+    `,
+  },
+
+  {
+    id: "java",
+    name: "Java",
+    icon: "/icons/java-icon.svg",
+    icon3D: "/icons/java-icon.svg",
+    text: `
+Descreva aqui sua experiência com Java.
+    `,
+  },
+
+  {
+    id: "javascript",
+    name: "JavaScript",
+    icon: "/icons/js-icon.svg",
+    icon3D: "/icons/js-icon.svg",
+    text: `
+Descreva aqui sua experiência com JavaScript.
+    `,
+  },
+
+  {
+    id: "mongodb",
+    name: "MongoDB",
+    icon: "/icons/mongodb-icon.svg",
+    icon3D: "/icons/mongodb-icon.svg",
+    text: `
+Descreva aqui sua experiência com MongoDB.
+    `,
+  },
+
+  {
+    id: "nodejs",
+    name: "Node.js",
+    icon: "/icons/node-js-icon.svg",
+    icon3D: "/icons/node-js-icon.svg",
+    text: `
+Descreva aqui sua experiência com Node.js.
+    `,
+  },
+
+  {
+    id: "npm",
+    name: "npm",
+    icon: "/icons/npm-icon.svg",
+    icon3D: "/icons/npm-icon.svg",
+    text: `
+Descreva aqui sua experiência com npm.
+    `,
+  },
+
+  {
+    id: "postgresql",
+    name: "PostgreSQL",
+    icon: "/icons/postgre-icon.svg",
+    icon3D: "/icons/postgre-icon.svg",
+    text: `
+Descreva aqui sua experiência com PostgreSQL.
+    `,
+  },
+
+  {
+    id: "postman",
+    name: "Postman",
+    icon: "/icons/postman-icon.svg",
+    icon3D: "/icons/postman-icon.svg",
+    text: `
+Descreva aqui sua experiência com Postman.
+    `,
+  },
+
+  {
+    id: "prisma",
+    name: "Prisma",
+    icon: "/icons/prisma-icon.svg",
+    icon3D: "/icons/prisma-icon.svg",
+    text: `
+Descreva aqui sua experiência com Prisma.
+    `,
+  },
+
+  {
     id: "react",
     name: "React",
-    icon: "/icons/react-icon-svg.svg",
-    icon3D: "/icons/react-icon-svg.svg",
-    color: "#61dafb",
+    icon: "/icons/react-icon.svg",
+    icon3D: "/icons/react-icon.svg",
     text: `
 Utilizo React para desenvolver interfaces modernas e componentizadas,
 trabalhando com estados, propriedades, hooks e organização de componentes.
@@ -42,11 +202,21 @@ interativas e experiências web integradas com recursos 3D.
   },
 
   {
+    id: "threejs",
+    name: "Three.js",
+    icon: "/icons/threejs-icon.svg",
+    icon3D: "/icons/threejs-icon.svg",
+    text: `
+Utilizo Three.js em conjunto com React Three Fiber para trabalhar com
+modelos, animações e experiências tridimensionais diretamente no navegador.
+    `,
+  },
+
+  {
     id: "typescript",
     name: "TypeScript",
-    icon: "/icons/react-icon-svg.svg",
-    icon3D: "/icons/react-icon-svg.svg",
-    color: "#3178c6",
+    icon: "/icons/typescript-icon.svg",
+    icon3D: "/icons/typescript-icon.svg",
     text: `
 Utilizo TypeScript para adicionar tipagem ao desenvolvimento JavaScript,
 deixando componentes, propriedades e estruturas de dados mais previsíveis.
@@ -54,27 +224,13 @@ deixando componentes, propriedades e estruturas de dados mais previsíveis.
   },
 
   {
-    id: "javascript",
-    name: "JavaScript",
-    icon: "/icons/react-icon-svg.svg",
-    icon3D: "/icons/react-icon-svg.svg",
-    color: "#f7df1e",
+    id: "vite",
+    name: "Vite",
+    icon: "/icons/vite-icon.svg",
+    icon3D: "/icons/vite-icon.png",
     text: `
-JavaScript está presente em boa parte dos projetos web que desenvolvo,
-principalmente na criação de comportamentos, interações e integrações.
-    `,
-  },
-
-  {
-    id: "three",
-    name: "Three.js",
-    icon: "/icons/react-icon-svg.svg",
-    icon3D: "/icons/react-icon-svg.svg",
-    color: "#ffffff",
-    text: `
-Utilizo Three.js em conjunto com React Three Fiber para trabalhar com
-modelos, animações e experiências tridimensionais diretamente no navegador.
-    `,
+Descreva aqui sua experiência com Vite.
+  `,
   },
 ];
 
@@ -138,7 +294,7 @@ function TechnologyScene({
    * ==============================
    */
 
-  const CLOUD_RADIUS = 1;
+  const CLOUD_RADIUS = 1.5;
 
   /*
    * Deixe true enquanto estiver
@@ -274,7 +430,7 @@ function TechnologyScene({
           MOVER A NUVEM INTEIRA.
       ============================ */}
 
-      <group position={[0, 0, 0]}>
+      <group position={[0, -0.5, 0]}>
         {/* ============================
             DEBUG DO CENTRO
         ============================ */}
@@ -370,11 +526,23 @@ function TechnologyScene({
                       }
                     }}
                   >
-                    <TechnologyIcon3D
-                      src={technology.icon3D}
-                      color={technology.color}
-                      scale={0.008}
-                    />
+                    <mesh>
+                      <planeGeometry args={[0.55, 0.55]} />
+
+                      <meshBasicMaterial
+                        transparent
+                        opacity={0}
+                        depthWrite={false}
+                      />
+                    </mesh>
+                    {technology.icon3D.endsWith(".png") ? (
+                      <TechnologyIconPNG src={technology.icon3D} size={0.48} />
+                    ) : (
+                      <TechnologyIcon3D
+                        src={technology.icon3D}
+                        scale={0.0035}
+                      />
+                    )}
                   </group>
                 </Billboard>
               </group>
