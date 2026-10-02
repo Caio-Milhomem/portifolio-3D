@@ -74,14 +74,17 @@ export default defineConfig([
 
 Backlog:
 
-- espelhar animação de abertura do card em "Tecnologias" para o fechamento tambem
+- espelhar animação de abertura do card em "Tecnologias" para o fechamento tambem.
 - Gerar ou buscar os objetos 3D do "Sobre".
-- Gerar ou buscar os SVGs (e se necessário os PNGs) das tecnologias.
 - Otimizar animações do card (60 fps)
 - Ajustar layout do Card.
+- Criar layout do card parecido com o terminal e colocar os simbolos desenhados com characteres.
+- verificar luz dos icones 3d (no modo escuro está um pouco dificil ver).
+- Fazer com que o fundo do modo escuro tenha os detalhes parecidos com o do modo claro (parecer sala).
+- Colocar nível de expertise no card das techs.
 
 Melhorias:
 
 - suavizar a movimentação da cabeça.
 - Criar animações de character e objetos para o "Sobre".
-- Criar layout do card parecido com o terminal e colocar os simbolos desenhados com characteres
+- colocar borda branca em icons pretos quando fundo escuro.

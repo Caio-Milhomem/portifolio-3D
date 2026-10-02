@@ -80,7 +80,7 @@
 }
 
 /* ==============================
-   PAINEL DIREITO
+   CARD / TERMINAL
 ============================== */
 
 .technology-card {
@@ -89,119 +89,287 @@
   top: 50%;
   right: 7%;
 
-  width: min(420px, 36vw);
-  max-height: 72vh;
+  width: min(440px, 34vw);
+  max-height: 74vh;
 
   transform: translateY(-50%);
 
+  z-index: 6;
+
   box-sizing: border-box;
 
-  padding: 34px 34px 30px;
-
-  border: 1px solid rgba(20, 20, 20, 0.25);
-  border-radius: 22px;
-
-  background: rgba(255, 255, 255, 0.92);
-  color: #111111;
-
-  backdrop-filter: blur(12px);
-
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
-
-  overflow: hidden;
-
-  animation: technologyCardEnter 0.35s ease;
-}
-
-.technology-card.open {
-  opacity: 1;
-
-  transform: translateX(0);
-
-  pointer-events: auto;
+  animation: technologyCardEnter 0.35s ease forwards;
 }
 
 /* ==============================
-   CABEÇALHO
+   CARD FECHANDO
 ============================== */
 
-.technology-card-header {
+.technology-card.closing {
+  animation: technologyCardExit 0.35s ease forwards;
+
+  pointer-events: none;
+}
+
+/* ==============================
+   JANELA DO TERMINAL
+============================== */
+
+.technology-terminal {
+  width: 100%;
+  max-height: 74vh;
+
   display: flex;
   flex-direction: column;
+
+  overflow: hidden;
+
+  background: #050505;
+
+  border: 1px solid #353535;
+
+  border-radius: 8px;
+
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+
+  font-family: "Courier New", Courier, monospace;
+}
+
+/* ==============================
+   BARRA SUPERIOR
+============================== */
+
+.technology-terminal-header {
+  height: 36px;
+  min-height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 10px 0 14px;
+
+  box-sizing: border-box;
+
+  background: #1c1c1c;
+
+  border-bottom: 1px solid #343434;
+
+  color: #bfbfbf;
+
+  font-size: 12px;
+  line-height: 1;
+
+  user-select: none;
+}
+
+/* ==============================
+   CONTROLES DA JANELA
+============================== */
+
+.technology-terminal-controls {
+  height: 100%;
+
+  display: flex;
   align-items: center;
 
-  text-align: center;
+  gap: 15px;
+
+  color: #898989;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 12px;
+}
+
+/* ==============================
+   CONTEÚDO
+============================== */
+
+.technology-terminal-content {
+  flex: 1;
+
+  min-height: 0;
+
+  padding: 20px 22px 22px;
+
+  box-sizing: border-box;
+
+  overflow-y: auto;
+
+  color: #d7d7d7;
+
+  font-size: 13px;
+  line-height: 1.65;
+
+  scrollbar-width: thin;
+
+  scrollbar-color: #444444 transparent;
+}
+
+.technology-terminal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.technology-terminal-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.technology-terminal-content::-webkit-scrollbar-thumb {
+  background: #444444;
+
+  border-radius: 10px;
+}
+
+/* ==============================
+   COMANDO
+============================== */
+
+.technology-terminal-command {
+  margin-bottom: 24px;
+
+  color: #dedede;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  white-space: nowrap;
+}
+
+.technology-terminal-path {
+  color: #747474;
+}
+
+/* ==============================
+   RESULTADO
+============================== */
+
+.technology-terminal-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
   margin-bottom: 28px;
 }
 
-.technology-card-header img {
-  width: 92px;
-  height: 92px;
-
-  object-fit: contain;
-
-  margin-bottom: 16px;
-}
-
-.technology-card-header h2 {
-  margin: 0;
-
-  font-size: 38px;
-  line-height: 1;
-}
-
 /* ==============================
-   TEXTO
+   ASCII ART
 ============================== */
 
-.technology-card-text {
-  max-height: 42vh;
+.technology-terminal-ascii-container {
+  width: 100%;
 
-  overflow-y: auto;
+  max-height: 190px;
 
-  padding-right: 8px;
+  margin-bottom: 22px;
+
+  overflow: hidden;
 }
 
-.technology-card-text p {
+.technology-terminal-ascii {
   margin: 0;
-
-  white-space: pre-line;
-
-  font-size: 17px;
-  line-height: 1.7;
-
-  opacity: 0.84;
-}
-
-/* ==============================
-   FECHAR
-============================== */
-
-.technology-close {
-  position: absolute;
-
-  top: 30px;
-  right: 35px;
-
-  width: 40px;
-  height: 40px;
-
   padding: 0;
+
+  width: max-content;
+
+  background: transparent;
 
   border: none;
 
-  background: transparent;
-  color: inherit;
+  color: #e2e2e2;
 
-  font-family: inherit;
-  font-size: 30px;
+  font-family: "Courier New", Courier, monospace;
 
-  cursor: pointer;
+  /*
+   * Mantemos muitos caracteres
+   * para preservar o detalhe,
+   * mas reduzimos apenas o tamanho
+   * visual da arte.
+   */
+  font-size: 2px;
+
+  font-weight: 700;
+
+  line-height: 0.95;
+
+  letter-spacing: 0;
+
+  white-space: pre;
+
+  user-select: none;
+
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.14);
 }
 
-.technology-card {
-  z-index: 6;
+/* ==============================
+   NOME DA TECNOLOGIA
+============================== */
+
+.technology-terminal-result h2 {
+  margin: 0 0 16px;
+
+  color: #f3f3f3;
+
+  font-family: "Courier New", Courier, monospace;
+
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.technology-terminal-result h2::before {
+  content: "> ";
+
+  color: #767676;
+}
+
+/* ==============================
+   DESCRIÇÃO
+============================== */
+
+.technology-terminal-result p {
+  margin: 0;
+
+  color: #b8b8b8;
+
+  font-family: "Courier New", Courier, monospace;
+
+  font-size: 13px;
+  line-height: 1.75;
+
+  white-space: pre-line;
+}
+
+/* ==============================
+   PROMPT FINAL
+============================== */
+
+.technology-terminal-prompt {
+  display: flex;
+  align-items: center;
+
+  margin-top: 4px;
+
+  color: #747474;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  white-space: nowrap;
+}
+
+/* ==============================
+   CURSOR
+============================== */
+
+.technology-terminal-cursor {
+  margin-left: 5px;
+
+  color: #e0e0e0;
+
+  animation: technologyTerminalBlink 1s steps(1) infinite;
 }
 
 /* ==============================
@@ -226,16 +394,137 @@
     0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
+/* ==============================
+   ENTRADA DO CARD
+============================== */
+
 @keyframes technologyCardEnter {
   from {
     opacity: 0;
 
-    transform: translateY(-50%) translateX(30px) scale(0.96);
+    transform: translateY(-50%) translateX(30px) scale(0.97);
   }
 
   to {
     opacity: 1;
 
     transform: translateY(-50%) translateX(0) scale(1);
+  }
+}
+
+/* ==============================
+   SAÍDA DO CARD
+============================== */
+
+@keyframes technologyCardExit {
+  from {
+    opacity: 1;
+
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+
+    transform: translateY(-50%) translateX(30px) scale(0.97);
+  }
+}
+
+/* ==============================
+   CURSOR PISCANDO
+============================== */
+
+@keyframes technologyTerminalBlink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ==============================
+   RESPONSIVO
+============================== */
+
+@media (max-width: 900px) {
+  .technology-card {
+    right: 4%;
+
+    width: min(400px, 44vw);
+  }
+
+  .technology-terminal-ascii {
+    font-size: 2px;
+  }
+}
+
+/* ==============================
+   MOBILE
+============================== */
+
+@media (max-width: 700px) {
+  .technology-card {
+    top: auto;
+
+    right: 5%;
+    bottom: 5%;
+    left: 5%;
+
+    width: auto;
+
+    max-height: 42vh;
+
+    transform: none;
+  }
+
+  .technology-terminal {
+    max-height: 42vh;
+  }
+
+  .technology-terminal-content {
+    padding: 16px 18px 18px;
+  }
+
+  .technology-terminal-ascii {
+    font-size: 2px;
+  }
+
+  /*
+   * Como no mobile o card
+   * não usa translateY(-50%),
+   * entrada e saída precisam
+   * de transforms próprios.
+   */
+
+  @keyframes technologyCardEnter {
+    from {
+      opacity: 0;
+
+      transform: translateY(20px) scale(0.97);
+    }
+
+    to {
+      opacity: 1;
+
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes technologyCardExit {
+    from {
+      opacity: 1;
+
+      transform: translateY(0) scale(1);
+    }
+
+    to {
+      opacity: 0;
+
+      transform: translateY(20px) scale(0.97);
+    }
   }
 }

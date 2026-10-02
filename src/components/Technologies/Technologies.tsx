@@ -1,28 +1,30 @@
 import {
   useRef,
   useState,
+  useEffect,
+  type AnimationEvent as ReactAnimationEvent,
   type MutableRefObject,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-
 import { Environment, Billboard } from "@react-three/drei";
 
 import * as THREE from "three";
 
 import { TechnologyIcon3D } from "./TechnologyIcon3D";
+import { TechnologyIconPNG } from "./TechnologyIconPNG";
 import { Model } from "../Hero/Model";
 
 import "./Technologies.css";
-
-import { TechnologyIconPNG } from "./TechnologyIconPNG";
 
 type Technology = {
   id: string;
   name: string;
   icon: string;
   icon3D: string;
+  iconScale?: number;
+  asciiFile?: string;
   text: string;
 };
 
@@ -32,9 +34,10 @@ const technologies: Technology[] = [
     name: "Azure",
     icon: "/icons/azure-icon.svg",
     icon3D: "/icons/azure-icon.png",
+    asciiFile: "/ascii-icons/azure.txt",
     text: `
 Descreva aqui sua experiência com Azure.
-  `,
+    `,
   },
 
   {
@@ -44,7 +47,7 @@ Descreva aqui sua experiência com Azure.
     icon3D: "/icons/bootstrap-icon.png",
     text: `
 Descreva aqui sua experiência com Bootstrap.
-  `,
+    `,
   },
 
   {
@@ -152,6 +155,7 @@ Descreva aqui sua experiência com Node.js.
     name: "npm",
     icon: "/icons/npm-icon.svg",
     icon3D: "/icons/npm-icon.svg",
+    iconScale: 1.3,
     text: `
 Descreva aqui sua experiência com npm.
     `,
@@ -230,7 +234,18 @@ deixando componentes, propriedades e estruturas de dados mais previsíveis.
     icon3D: "/icons/vite-icon.png",
     text: `
 Descreva aqui sua experiência com Vite.
-  `,
+    `,
+  },
+
+  {
+    id: "n8n",
+    name: "n8n",
+    icon: "/icons/n8n-icon.svg",
+    icon3D: "/icons/n8n-icon.svg",
+    iconScale: 1.9,
+    text: `
+Descreva aqui sua experiência com n8n.
+    `,
   },
 ];
 
@@ -241,41 +256,22 @@ type TechnologiesProps = {
 type CloudInteraction = {
   dragging: boolean;
   pointerDown: boolean;
-  /*
-   * Rotação que veio diretamente
-   * do arraste do mouse.
-   */
+
   pendingRotationX: number;
   pendingRotationY: number;
 
-  /*
-   * Inércia depois que o usuário
-   * solta o mouse.
-   */
   inertiaX: number;
   inertiaY: number;
 
-  /*
-   * Posição do mouse relativa
-   * ao centro da área.
-   *
-   * -1 até 1
-   */
   hoverX: number;
   hoverY: number;
 
-  /*
-   * Evita abrir uma tecnologia
-   * depois de um drag.
-   */
   suppressClickUntil: number;
 };
 
 type TechnologySceneProps = {
   selectedTechnology: Technology | null;
-
   onSelect: (technology: Technology) => void;
-
   interaction: MutableRefObject<CloudInteraction>;
 };
 
@@ -285,26 +281,16 @@ function TechnologyScene({
   interaction,
 }: TechnologySceneProps) {
   const sceneGroup = useRef<THREE.Group>(null);
-
   const orbitGroup = useRef<THREE.Group>(null);
 
-  /*
-   * ==============================
-   * CONFIGURAÇÕES DA NUVEM
-   * ==============================
-   */
+  /* ==============================
+     CONFIGURAÇÕES DA NUVEM
+  ============================== */
 
   const CLOUD_RADIUS = 1.5;
 
-  /*
-   * Deixe true enquanto estiver
-   * acertando o centro da nuvem.
-   */
   const DEBUG_CLOUD_CENTER = true;
 
-  /*
-   * Velocidade automática atual.
-   */
   const autoVelocity = useRef({
     x: 0.02,
     y: 0.12,
@@ -312,35 +298,22 @@ function TechnologyScene({
 
   useFrame((_, delta) => {
     if (orbitGroup.current) {
-      /*
-       * ==============================
-       * DRAG DIRETO
-       * ==============================
-       *
-       * O movimento acumulado pelo DOM
-       * é aplicado diretamente aqui.
-       */
+      /* ==============================
+         DRAG DIRETO
+      ============================== */
 
       orbitGroup.current.rotation.x += interaction.current.pendingRotationX;
 
       orbitGroup.current.rotation.y += interaction.current.pendingRotationY;
 
       interaction.current.pendingRotationX = 0;
-
       interaction.current.pendingRotationY = 0;
 
-      /*
-       * ==============================
-       * SEM ARRASTAR
-       * ==============================
-       */
+      /* ==============================
+         SEM ARRASTAR
+      ============================== */
 
       if (!interaction.current.dragging) {
-        /*
-         * O mouse influencia a direção
-         * da rotação automática.
-         */
-
         const targetVelocityX = -interaction.current.hoverY * 0.12;
 
         const targetVelocityY = 0.12 + interaction.current.hoverX * 0.18;
@@ -359,21 +332,11 @@ function TechnologyScene({
           delta,
         );
 
-        /*
-         * Movimento automático
-         * + inércia do drag.
-         */
-
         orbitGroup.current.rotation.x +=
           (autoVelocity.current.x + interaction.current.inertiaX) * delta;
 
         orbitGroup.current.rotation.y +=
           (autoVelocity.current.y + interaction.current.inertiaY) * delta;
-
-        /*
-         * Inércia desaparece
-         * progressivamente.
-         */
 
         interaction.current.inertiaX = THREE.MathUtils.damp(
           interaction.current.inertiaX,
@@ -391,11 +354,9 @@ function TechnologyScene({
       }
     }
 
-    /*
-     * ==============================
-     * MOVIMENTO DA CENA
-     * ==============================
-     */
+    /* ==============================
+       MOVIMENTO DA CENA
+    ============================== */
 
     if (sceneGroup.current) {
       const targetX = selectedTechnology ? -1.8 : 0;
@@ -425,9 +386,6 @@ function TechnologyScene({
 
       {/* ============================
           CENTRO DA NUVEM
-
-          ALTERE ESTE POSITION PARA
-          MOVER A NUVEM INTEIRA.
       ============================ */}
 
       <group position={[0, -0.5, 0]}>
@@ -455,20 +413,7 @@ function TechnologyScene({
           {technologies.map((technology, index) => {
             const count = technologies.length;
 
-            /*
-             * Fibonacci Sphere.
-             *
-             * Distribuição uniforme
-             * dos ícones pela esfera.
-             */
-
             const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-
-            /*
-             * O +0.5 evita colocar
-             * ícones exatamente nos
-             * polos da esfera.
-             */
 
             const normalizedY = 1 - (2 * (index + 0.5)) / count;
 
@@ -486,25 +431,10 @@ function TechnologyScene({
 
             return (
               <group key={technology.id} position={[x, y, z]}>
-                {/*
-                    A posição é realmente
-                    tridimensional.
-
-                    O Billboard serve apenas
-                    para o logo continuar
-                    olhando para a câmera.
-                  */}
-
                 <Billboard>
                   <group
                     onClick={(event) => {
                       event.stopPropagation();
-
-                      /*
-                       * Se acabamos de
-                       * arrastar a nuvem,
-                       * não abrimos o card.
-                       */
 
                       if (
                         performance.now() <
@@ -526,6 +456,8 @@ function TechnologyScene({
                       }
                     }}
                   >
+                    {/* HITBOX */}
+
                     <mesh>
                       <planeGeometry args={[0.55, 0.55]} />
 
@@ -535,12 +467,18 @@ function TechnologyScene({
                         depthWrite={false}
                       />
                     </mesh>
+
+                    {/* ÍCONE */}
+
                     {technology.icon3D.endsWith(".png") ? (
-                      <TechnologyIconPNG src={technology.icon3D} size={0.48} />
+                      <TechnologyIconPNG
+                        src={technology.icon3D}
+                        size={0.55 * (technology.iconScale ?? 1)}
+                      />
                     ) : (
                       <TechnologyIcon3D
                         src={technology.icon3D}
-                        scale={0.0035}
+                        scale={0.004 * (technology.iconScale ?? 1)}
                       />
                     )}
                   </group>
@@ -558,17 +496,13 @@ export function Technologies({ isActive }: TechnologiesProps) {
   const [selectedTechnology, setSelectedTechnology] =
     useState<Technology | null>(null);
 
-  /*
-   * ==============================
-   * INTERAÇÃO DA ICON CLOUD
-   * ==============================
-   *
-   * Agora toda a interação acontece
-   * no DIV HTML da cena.
-   *
-   * Não depende mais do raycaster
-   * do Three.js.
-   */
+  const [isCardClosing, setIsCardClosing] = useState(false);
+
+  const [asciiArt, setAsciiArt] = useState("");
+
+  /* ==============================
+     INTERAÇÃO DA ICON CLOUD
+  ============================== */
 
   const interaction = useRef<CloudInteraction>({
     dragging: false,
@@ -596,20 +530,101 @@ export function Technologies({ isActive }: TechnologiesProps) {
     y: 0,
   });
 
-  function closeTechnology() {
+  /* ==============================
+     CARD
+  ============================== */
+
+  function handleCardAnimationEnd(event: ReactAnimationEvent<HTMLDivElement>) {
+    /*
+     * O cursor do terminal também possui
+     * uma animação.
+     *
+     * Ignoramos animationend de elementos
+     * filhos do card.
+     */
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
+    /*
+     * Só removemos o card quando a
+     * animação de saída realmente terminar.
+     */
+    if (!isCardClosing || event.animationName !== "technologyCardExit") {
+      return;
+    }
+
     setSelectedTechnology(null);
+    setIsCardClosing(false);
+  }
+
+  function closeTechnology() {
+    if (!selectedTechnology || isCardClosing) {
+      return;
+    }
+
+    /*
+     * Não removemos selectedTechnology
+     * agora.
+     *
+     * Primeiro executamos a animação
+     * de saída.
+     */
+    setIsCardClosing(true);
 
     document.body.style.cursor = "default";
   }
 
-  /*
-   * ==============================
-   * POINTER DOWN
-   * ==============================
-   */
+  function selectTechnology(technology: Technology) {
+    /*
+     * Se clicar em outra tecnologia
+     * durante o fechamento, cancela
+     * a saída e mantém o card aberto.
+     */
+    setIsCardClosing(false);
+
+    setSelectedTechnology(technology);
+  }
+
+  /* ==============================
+     ASCII
+  ============================== */
+
+  useEffect(() => {
+    if (!selectedTechnology?.asciiFile) {
+      setAsciiArt("");
+      return;
+    }
+
+    setAsciiArt("");
+
+    fetch(selectedTechnology.asciiFile)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Erro ao carregar ASCII: ${selectedTechnology.asciiFile}`,
+          );
+        }
+
+        return response.text();
+      })
+      .then((text) => {
+        setAsciiArt(text);
+      })
+      .catch((error) => {
+        console.error(error);
+
+        setAsciiArt(`[ ${selectedTechnology.name} ]`);
+      });
+  }, [selectedTechnology]);
+
+  /* ==============================
+     POINTER DOWN
+  ============================== */
 
   function handleCloudPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     interaction.current.pointerDown = true;
+
     interaction.current.dragging = false;
 
     interaction.current.inertiaX = 0;
@@ -626,22 +641,11 @@ export function Technologies({ isActive }: TechnologiesProps) {
       x: event.clientX,
       y: event.clientY,
     };
-
-    /*
-     * IMPORTANTE:
-     *
-     * NÃO fazemos setPointerCapture aqui.
-     *
-     * Se for apenas clique, deixamos o Canvas
-     * receber pointerDown + pointerUp + click normalmente.
-     */
   }
 
-  /*
-   * ==============================
-   * POINTER MOVE
-   * ==============================
-   */
+  /* ==============================
+     POINTER MOVE
+  ============================== */
 
   function handleCloudPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -662,11 +666,6 @@ export function Technologies({ isActive }: TechnologiesProps) {
       1,
     );
 
-    /*
-     * Mouse não está pressionado.
-     *
-     * Só influencia a rotação automática.
-     */
     if (!interaction.current.pointerDown) {
       return;
     }
@@ -678,16 +677,12 @@ export function Technologies({ isActive }: TechnologiesProps) {
     const dragDistance = Math.hypot(totalDragX, totalDragY);
 
     /*
-     * Só começa a arrastar depois
-     * de movimentar 6 pixels.
+     * Só vira drag depois de 6px.
      */
     if (!interaction.current.dragging && dragDistance < 6) {
       return;
     }
 
-    /*
-     * A partir daqui virou drag.
-     */
     if (!interaction.current.dragging) {
       interaction.current.dragging = true;
 
@@ -695,10 +690,6 @@ export function Technologies({ isActive }: TechnologiesProps) {
 
       interaction.current.suppressClickUntil = performance.now() + 200;
 
-      /*
-       * Agora sim:
-       * sabemos que virou um drag real.
-       */
       event.currentTarget.setPointerCapture(event.pointerId);
 
       lastPointer.current = {
@@ -713,16 +704,10 @@ export function Technologies({ isActive }: TechnologiesProps) {
 
     const deltaY = event.clientY - lastPointer.current.y;
 
-    /*
-     * Rotação direta.
-     */
     interaction.current.pendingRotationY += deltaX * 0.01;
 
     interaction.current.pendingRotationX += deltaY * 0.01;
 
-    /*
-     * Inércia.
-     */
     interaction.current.inertiaY = deltaX * 0.16;
 
     interaction.current.inertiaX = deltaY * 0.16;
@@ -733,11 +718,9 @@ export function Technologies({ isActive }: TechnologiesProps) {
     };
   }
 
-  /*
-   * ==============================
-   * POINTER UP
-   * ==============================
-   */
+  /* ==============================
+     POINTER UP
+  ============================== */
 
   function handleCloudPointerUp(event: ReactPointerEvent<HTMLDivElement>) {
     const wasDragging = interaction.current.dragging;
@@ -757,11 +740,9 @@ export function Technologies({ isActive }: TechnologiesProps) {
     }
   }
 
-  /*
-   * ==============================
-   * POINTER ENTER
-   * ==============================
-   */
+  /* ==============================
+     POINTER ENTER
+  ============================== */
 
   function handleCloudPointerEnter(event: ReactPointerEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -787,18 +768,11 @@ export function Technologies({ isActive }: TechnologiesProps) {
     }
   }
 
-  /*
-   * ==============================
-   * POINTER LEAVE
-   * ==============================
-   */
+  /* ==============================
+     POINTER LEAVE
+  ============================== */
 
   function handleCloudPointerLeave() {
-    /*
-     * Quando o mouse sai da área,
-     * a influência volta para o centro.
-     */
-
     interaction.current.hoverX = 0;
     interaction.current.hoverY = 0;
 
@@ -827,11 +801,10 @@ export function Technologies({ isActive }: TechnologiesProps) {
           frameloop="always"
           camera={{
             position: [0, 1.4, 6.5],
-
             fov: 45,
           }}
           onPointerMissed={() => {
-            if (selectedTechnology) {
+            if (selectedTechnology && !isCardClosing) {
               closeTechnology();
             }
           }}
@@ -844,31 +817,76 @@ export function Technologies({ isActive }: TechnologiesProps) {
 
           <TechnologyScene
             selectedTechnology={selectedTechnology}
-            onSelect={setSelectedTechnology}
+            onSelect={selectTechnology}
             interaction={interaction}
           />
         </Canvas>
       </div>
 
       {/* ============================
-          CARD
+          TERMINAL
       ============================ */}
 
       {selectedTechnology && (
         <div
-          className="technology-card"
+          className={`technology-card ${isCardClosing ? "closing" : ""}`}
+          onAnimationEnd={handleCardAnimationEnd}
           onClick={(event) => {
             event.stopPropagation();
           }}
         >
-          <div className="technology-card-header">
-            <img src={selectedTechnology.icon} alt={selectedTechnology.name} />
+          <div className="technology-terminal">
+            {/* ============================
+                CABEÇALHO
+            ============================ */}
 
-            <h2>{selectedTechnology.name}</h2>
-          </div>
+            <div className="technology-terminal-header">
+              <span>technology.exe</span>
 
-          <div className="technology-card-text">
-            <p>{selectedTechnology.text}</p>
+              <div className="technology-terminal-controls">
+                <span>—</span>
+                <span>□</span>
+                <span>×</span>
+              </div>
+            </div>
+
+            {/* ============================
+                CONTEÚDO
+            ============================ */}
+
+            <div className="technology-terminal-content">
+              {/* COMANDO */}
+
+              <div className="technology-terminal-command">
+                <span className="technology-terminal-path">
+                  {"C:\\portfolio\\technologies>"}
+                </span>
+
+                <span> show {selectedTechnology.id}</span>
+              </div>
+
+              {/* RESULTADO */}
+
+              <div className="technology-terminal-result">
+                <div className="technology-terminal-ascii-container">
+                  <pre className="technology-terminal-ascii">
+                    {asciiArt || `[ ${selectedTechnology.name} ]`}
+                  </pre>
+                </div>
+
+                <h2>{selectedTechnology.name}</h2>
+
+                <p>{selectedTechnology.text}</p>
+              </div>
+
+              {/* PROMPT FINAL */}
+
+              <div className="technology-terminal-prompt">
+                <span>{"C:\\portfolio\\technologies>"}</span>
+
+                <span className="technology-terminal-cursor">_</span>
+              </div>
+            </div>
           </div>
         </div>
       )}
