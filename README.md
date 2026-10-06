@@ -88,3 +88,4 @@ Melhorias:
 - suavizar a movimentação da cabeça.
 - Criar animações de character e objetos para o "Sobre".
 - colocar borda branca em icons pretos quando fundo escuro.
+- Icon ASCII demorando para carregar.

@@ -5,6 +5,7 @@ import { SideMenu } from "./components/SideMenu/SideMenu";
 import { HelpButton } from "./components/HelpButton/HelpButton";
 import { About } from "./components/About/About";
 import { Technologies } from "./components/Technologies/Technologies";
+import { Contact } from "./components/Contact/Contact";
 
 const FORCE_LOADING = false; // trava na tela de loading se true
 
@@ -161,7 +162,9 @@ export default function App() {
             <Technologies isActive={activeSection === "tecnologias"} />
           </section>
 
-          <section id="contato">{/* Contato */}</section>
+          <section id="contato">
+            <Contact />
+          </section>
         </>
       )}
     </main>
