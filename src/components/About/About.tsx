@@ -1,18 +1,15 @@
 import { useState } from "react";
 
 import { Canvas } from "@react-three/fiber";
-
 import { Environment } from "@react-three/drei";
 
 import { AvatarModel } from "../three/AvatarModel";
-
 import { TechKeyButton } from "../ui/TechKeyButton/TechKeyButton";
-
 import { TerminalWindow } from "../ui/TerminalWindow/TerminalWindow";
 
-import "./About.css";
-
 import { tabs, type AboutTabId } from "./AboutTabs";
+
+import "./About.css";
 
 export function About() {
   const [activeTab, setActiveTab] = useState<AboutTabId | null>(null);
@@ -25,13 +22,30 @@ export function About() {
     setActiveTab((current) => (current === tabId ? null : tabId));
   }
 
-  return (
-    <section className="about" id="about">
-      {/* ============================
-            BOTÕES
-        ============================ */}
+  function closeAboutLayout() {
+    if (!activeTab) {
+      return;
+    }
 
-      <div className="about-key-list">
+    setActiveTab(null);
+  }
+
+  return (
+    <section
+      className={`about ${selectedTab ? "about--active" : "about--idle"}`}
+      id="about"
+      onClick={closeAboutLayout}
+    >
+      {/* ============================
+          BOTÕES
+      ============================ */}
+
+      <div
+        className="about-key-list"
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
         {tabs.map((tab) => (
           <div
             key={tab.id}
@@ -49,17 +63,25 @@ export function About() {
           </div>
         ))}
       </div>
+
       {/* ============================
           AVATAR
       ============================ */}
 
-      <div className="about-avatar">
+      <div
+        className="about-avatar"
+        onPointerDown={(event) => {
+          event.stopPropagation();
+        }}
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
         <Canvas
           dpr={1}
           frameloop="always"
           camera={{
             position: [0, 1.3, 6],
-
             fov: 45,
           }}
         >
@@ -80,15 +102,19 @@ export function About() {
       </div>
 
       {/* ============================
-          INTERFACE
+          TERMINAL
       ============================ */}
 
       <div className={`about-interface ${selectedTab ? "has-selection" : ""}`}>
-        {/* ============================
-            TERMINAL
-        ============================ */}
-
-        <div className="about-terminal-area">
+        <div
+          className="about-terminal-area"
+          onPointerDown={(event) => {
+            event.stopPropagation();
+          }}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
           {selectedTab && (
             <TerminalWindow
               open

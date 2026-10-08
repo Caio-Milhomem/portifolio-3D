@@ -5,13 +5,11 @@ export function ResumeButton() {
     <a
       href="/files/curriculo-caio-milhomem.pdf"
       download="Curriculo-Caio-Milhomem.pdf"
-      className="
-        resume-button
-        global-action-button
-      "
+      className="resume-button global-action-button"
       aria-label="Baixar currículo"
       title="Baixar currículo"
     >
+      <span className="resume-button-label">Currículo</span>
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
           d="
