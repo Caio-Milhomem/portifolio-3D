@@ -1,0 +1,210 @@
+.terminal-window {
+  width: min(460px, 38vw);
+
+  max-height: 72vh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: #050505;
+
+  border: 1px solid #353535;
+
+  border-radius: 8px;
+
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+
+  font-family: "Courier New", Courier, monospace;
+
+  animation: terminalWindowEnter 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ==============================
+   CABEÇALHO
+============================== */
+
+.terminal-window-header {
+  height: 36px;
+  min-height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 10px 0 14px;
+
+  box-sizing: border-box;
+
+  background: #1c1c1c;
+
+  border-bottom: 1px solid #343434;
+
+  color: #bfbfbf;
+
+  font-size: 12px;
+
+  user-select: none;
+}
+
+/* ==============================
+   CONTROLES
+============================== */
+
+.terminal-window-controls {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  color: #898989;
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.terminal-window-close {
+  padding: 0;
+
+  background: transparent;
+
+  border: 0;
+
+  color: inherit;
+
+  cursor: pointer;
+
+  font-size: 16px;
+}
+
+/* ==============================
+   CONTEÚDO
+============================== */
+
+.terminal-window-content {
+  padding: 20px 22px 22px;
+
+  box-sizing: border-box;
+
+  overflow-y: auto;
+
+  color: #d7d7d7;
+
+  font-size: 13px;
+
+  line-height: 1.65;
+}
+
+/* ==============================
+   COMANDO
+============================== */
+
+.terminal-window-command {
+  margin-bottom: 26px;
+
+  white-space: nowrap;
+}
+
+.terminal-window-path {
+  color: #747474;
+}
+
+/* ==============================
+   RESULTADO
+============================== */
+
+.terminal-window-result h2 {
+  margin: 0 0 16px;
+
+  color: #f3f3f3;
+
+  font-size: 21px;
+
+  line-height: 1.2;
+}
+
+.terminal-window-result h2::before {
+  content: "> ";
+
+  color: #767676;
+}
+
+.terminal-window-result p {
+  min-height: 80px;
+
+  margin: 0;
+
+  color: #b8b8b8;
+
+  font-size: 13px;
+
+  line-height: 1.75;
+
+  white-space: pre-line;
+}
+
+/* ==============================
+   CURSOR
+============================== */
+
+.terminal-window-cursor {
+  margin-left: 3px;
+
+  color: #e0e0e0;
+
+  animation: terminalCursorBlink 0.8s steps(1) infinite;
+}
+
+/* ==============================
+   PROMPT FINAL
+============================== */
+
+.terminal-window-prompt {
+  margin-top: 24px;
+
+  color: #747474;
+}
+
+/* ==============================
+   ANIMAÇÕES
+============================== */
+
+@keyframes terminalWindowEnter {
+  from {
+    opacity: 0;
+
+    transform: translateX(25px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes terminalCursorBlink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ==============================
+   RESPONSIVO
+============================== */
+
+@media (max-width: 800px) {
+  .terminal-window {
+    width: min(90vw, 460px);
+  }
+}

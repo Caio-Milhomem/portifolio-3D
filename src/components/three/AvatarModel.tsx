@@ -35,7 +35,7 @@ type ModelProps = React.JSX.IntrinsicElements["group"] & {
   onAnimationFinished?: () => void;
 };
 
-export function Model({
+export function AvatarModel({
   followMouse = true,
   activeAction = "idle.001",
   onModelClick,

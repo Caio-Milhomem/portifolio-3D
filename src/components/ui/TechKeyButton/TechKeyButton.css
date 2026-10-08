@@ -1,0 +1,475 @@
+/* ==============================
+   ENCAIXE / BURACO DA TECLA
+============================== */
+
+.tech-key-hole {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* antes estava grande demais */
+  padding: 2px;
+  padding-top: 3px;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    180deg,
+    #5b5f66 0%,
+    #2d3136 18%,
+    #111317 55%,
+    #050608 100%
+  );
+
+  /*
+   * Reduzi os highlights claros
+   * e deixei o buraco mais discreto.
+   */
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, 0.72),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.45),
+    inset 2px 0 4px rgba(0, 0, 0, 0.28),
+    inset -2px 0 4px rgba(0, 0, 0, 0.28);
+
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.tech-key-hole::after {
+  content: "";
+
+  position: absolute;
+  inset: 3px;
+
+  border-radius: 11px;
+
+  pointer-events: none;
+
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.45);
+}
+
+/* ==============================
+   ENCAIXE SELECIONADO
+============================== */
+
+.tech-key-hole--active {
+  background: linear-gradient(
+    180deg,
+    #852bfa 0%,
+    #6d3dff 18%,
+    #522fa3 58%,
+    #140c2d 100%
+  );
+
+  box-shadow:
+    inset 0 3px 7px rgba(36, 0, 119, 0.9),
+    inset 0 0 0 1px rgba(95, 79, 134, 0.75),
+    inset 0 -1px 0 rgba(27, 58, 12, 0.8),
+    0 0 20px rgba(119, 70, 255, 0.877);
+}
+
+.tech-key-hole--active::after {
+  box-shadow:
+    inset 0 0 6px rgba(33, 13, 80, 0.7),
+    inset 0 0 2px rgba(180, 150, 255, 0.623);
+}
+
+/* ==============================
+   TECH KEY BUTTON
+
+   Baseado na estrutura:
+   button
+   button-top
+   button-bottom
+   button-base
+============================== */
+
+.tech-key-button {
+  -webkit-appearance: none;
+  appearance: none;
+
+  position: relative;
+
+  width: 112px;
+  height: 112px;
+
+  border-width: 0;
+
+  padding: 0 8px 14px;
+
+  box-sizing: border-box;
+
+  background: transparent;
+
+  font: inherit;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  -webkit-tap-highlight-color: transparent;
+
+  isolation: isolate;
+
+  z-index: 1;
+}
+
+/* ==============================
+   TOPO DA TECLA
+============================== */
+
+.tech-key-top {
+  position: relative;
+
+  z-index: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  transform: translateY(0);
+
+  transition-property: transform;
+
+  transition-duration: 0.16s;
+
+  -webkit-user-select: none;
+
+  user-select: none;
+}
+
+/* ==============================
+   SUPERFÍCIE BRANCA
+
+   Equivalente ao ::after do
+   botão original vermelho.
+============================== */
+
+.tech-key-top::after {
+  content: "";
+
+  position: absolute;
+
+  z-index: -1;
+
+  inset: 0;
+
+  box-sizing: border-box;
+
+  border-radius: 10px;
+
+  /*
+   * Branco na região superior e
+   * cinza suave embaixo.
+   *
+   * Isso evita parecer simplesmente
+   * um quadrado branco chapado.
+   */
+
+  background-image: radial-gradient(
+    ellipse at 50% 20%,
+    #ffffff 0%,
+    #fbfbfb 32%,
+    #eeeeee 68%,
+    #d9d9d9 100%
+  );
+
+  /*
+   * Pequeno contorno claro e
+   * iluminação do material.
+   */
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.95),
+    inset 0 1px 2px rgba(255, 255, 255, 1),
+    0 1px 2px 1px rgba(255, 255, 255, 0.35);
+
+  transition-property: border-radius, padding, width, transform, background;
+
+  transition-duration: 0.16s;
+}
+
+/* ==============================
+   LATERAL DA TECLA
+
+   Essa parte é o que cria a
+   profundidade real da tecla.
+============================== */
+
+.tech-key-bottom {
+  position: absolute;
+
+  z-index: -1;
+
+  bottom: 4px;
+
+  left: 4px;
+
+  width: calc(100% - 8px);
+
+  height: calc(100% - 10px);
+
+  padding-top: 8px;
+
+  box-sizing: content-box;
+
+  /*
+   * Mantemos mais arredondamento
+   * embaixo, igual ao código
+   * original.
+   */
+
+  border-radius: 11px / 18px 18px 10px 10px;
+
+  /*
+   * Lateral branco/cinza.
+   *
+   * Essa é a região que visualmente
+   * faz a tecla parecer alta.
+   */
+
+  background-color: #c9c9c9;
+
+  background-image:
+    radial-gradient(
+      4px 8px at 4px calc(100% - 8px),
+      rgba(255, 255, 255, 0.75),
+      transparent
+    ),
+    radial-gradient(
+      4px 8px at calc(100% - 4px) calc(100% - 8px),
+      rgba(255, 255, 255, 0.75),
+      transparent
+    ),
+    radial-gradient(16px at -4px 0, #ffffff, transparent),
+    radial-gradient(16px at calc(100% + 4px) 0, #ffffff, transparent),
+    linear-gradient(180deg, #ededed 0%, #d6d6d6 42%, #bcbcbc 100%);
+
+  box-shadow:
+    0 3px 4px 0 rgba(0, 0, 0, 0.28),
+    inset 0 -1px 3px 3px rgba(0, 0, 0, 0.14);
+
+  transition-property: border-radius, padding-top;
+
+  transition-duration: 0.16s;
+}
+
+/* ==============================
+   BASE DA TECLA
+
+   É o encaixe que fica por baixo.
+============================== */
+
+.tech-key-base {
+  position: absolute;
+
+  z-index: -2;
+
+  top: 4px;
+
+  left: 0;
+
+  width: 100%;
+
+  height: calc(100% - 4px);
+
+  border-radius: 14px;
+
+  background-color: rgba(130, 130, 130, 0.24);
+
+  box-shadow:
+    0 1px 1px 0 rgba(5, 5, 5, 0.9),
+    inset 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ==============================
+   SÍMBOLO
+============================== */
+
+.tech-key-symbol {
+  position: relative;
+
+  z-index: 2;
+
+  width: 55%;
+
+  height: 55%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  /*
+   * Cinza escuro, como impressão
+   * de keycap.
+   */
+
+  color: #5c5c5c;
+
+  /*
+   * Essa sombra é propositalmente
+   * discreta. Queremos uma marca
+   * na tecla, não um ícone flutuando.
+   */
+
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.8))
+    drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.12));
+
+  pointer-events: none;
+
+  transition:
+    transform 0.16s ease,
+    color 0.16s ease;
+}
+
+/* ==============================
+   SVG
+============================== */
+
+.tech-key-symbol svg {
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  overflow: visible;
+}
+
+/* ==============================
+   SVG PREENCHIDO
+============================== */
+
+.tech-key-svg--fill path,
+.tech-key-svg--fill rect,
+.tech-key-svg--fill circle,
+.tech-key-svg--fill polygon {
+  fill: currentColor;
+
+  stroke: none;
+}
+
+/* ==============================
+   SVG DE LINHA
+============================== */
+
+.tech-key-svg--stroke path,
+.tech-key-svg--stroke rect,
+.tech-key-svg--stroke circle,
+.tech-key-svg--stroke line,
+.tech-key-svg--stroke polyline,
+.tech-key-svg--stroke polygon {
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 1.2;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+}
+
+/* ==============================
+   CLIQUE
+
+   Aqui mantemos praticamente
+   exatamente o comportamento
+   do exemplo que você trouxe.
+============================== */
+
+.tech-key-button:active .tech-key-top {
+  transform: translateY(6px);
+}
+
+.tech-key-button:active .tech-key-top::after {
+  border-radius: 12px;
+
+  padding: 0 2px;
+}
+
+.tech-key-button:active .tech-key-bottom {
+  border-radius: 12px 12px 10px 10px / 9px;
+
+  padding-top: 0;
+}
+
+.tech-key-button:active .tech-key-symbol {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* ==============================
+   TECLA ATIVA
+
+   Não muda para azul ou outra cor.
+   Continua sendo teclado branco.
+
+   Mantemos apenas levemente
+   pressionada.
+============================== */
+
+.tech-key-button--active .tech-key-top {
+  transform: translateY(3px);
+}
+
+.tech-key-button--active .tech-key-bottom {
+  padding-top: 4px;
+}
+
+.tech-key-button--active .tech-key-symbol {
+  color: #3f3f3f;
+}
+
+/* ==============================
+   ACTIVE + MOUSE DOWN
+
+   Precisa continuar podendo
+   pressionar uma tecla já ativa.
+============================== */
+
+.tech-key-button--active:active .tech-key-top {
+  transform: translateY(6px);
+}
+
+.tech-key-button--active:active .tech-key-bottom {
+  padding-top: 0;
+}
+
+/* ==============================
+   FOCO
+============================== */
+
+.tech-key-button:focus-visible {
+  outline: none;
+}
+
+.tech-key-button:focus-visible .tech-key-top::after {
+  box-shadow:
+    inset 0 0 0 2px rgba(90, 100, 115, 0.45),
+    inset 0 1px 2px rgba(255, 255, 255, 1),
+    0 1px 2px 1px rgba(255, 255, 255, 0.35);
+}
+
+/* ==============================
+   DISABLED
+============================== */
+
+.tech-key-button:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.45;
+}

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 
 import { ContactScene, type ContactId } from "./ContactScene";
-
+import { AvatarModel } from "../three/AvatarModel";
 import "./Contact.css";
 
 type ContactItem = {

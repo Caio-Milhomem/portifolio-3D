@@ -14,7 +14,7 @@ import * as THREE from "three";
 
 import { TechnologyIcon3D } from "./TechnologyIcon3D";
 import { TechnologyIconPNG } from "./TechnologyIconPNG";
-import { Model } from "../Hero/Model";
+import { AvatarModel } from "../three/AvatarModel";
 
 import "./Technologies.css";
 
@@ -376,7 +376,7 @@ function TechnologyScene({
           PERSONAGEM
       ============================ */}
 
-      <Model
+      <AvatarModel
         scale={2.25}
         position={[0, -2.15, 0]}
         rotation={[0, 0, 0]}

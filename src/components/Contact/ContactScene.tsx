@@ -6,7 +6,7 @@ import { Environment, ContactShadows } from "@react-three/drei";
 
 import * as THREE from "three";
 
-import { Model } from "../Hero/Model";
+import { AvatarModel } from "../three/AvatarModel";
 
 import { ContactIcon3D, type ContactIconName } from "./ContactIcon3D";
 
@@ -242,7 +242,7 @@ export function ContactScene({
           PERSONAGEM
       ============================ */}
 
-      <Model
+      <AvatarModel
         scale={2.5}
         position={[-2.25, -2.15, 0]}
         rotation={[0, 0, 0]}

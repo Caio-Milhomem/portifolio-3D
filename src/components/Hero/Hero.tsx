@@ -4,7 +4,7 @@ import { PCFShadowMap } from "three";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import "./Hero.css";
 
-import { Model } from "./Model";
+import { AvatarModel } from "../three/AvatarModel";
 import { TypingText3D } from "./TypingText3D";
 import { Loading3D } from "../Loading3D";
 import { EmoteMenu } from "../EmoteMenu/EmoteMenu";
@@ -57,7 +57,7 @@ function HeroContent({
       </group>
 
       {/* Personagem */}
-      <Model
+      <AvatarModel
         scale={2}
         position={[4, -1, 0]}
         rotation={[0, -0.4, 0]}
