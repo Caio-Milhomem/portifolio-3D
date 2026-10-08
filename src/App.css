@@ -1,10 +1,15 @@
 html,
 body,
 #root {
-  height: 100%;
   width: 100%;
+  height: 100%;
+
   margin: 0;
 }
+
+/* =========================================
+   APP
+========================================= */
 
 .app {
   --hero-background: linear-gradient(
@@ -29,133 +34,13 @@ body,
   );
 }
 
-.theme-icon-wrapper {
-  position: relative;
-
-  width: 30px;
-  height: 30px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.theme-toggle {
-  position: fixed;
-
-  top: 24px;
-  right: 24px;
-  left: auto;
-
-  z-index: 9999;
-
-  width: 60px;
-  height: 60px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-  margin: 0;
-
-  border-radius: 50%;
-
-  outline: none;
-
-  appearance: none;
-
-  -webkit-appearance: none;
-
-  cursor: pointer;
-
-  transition:
-    background 0.25s ease,
-    border-color 0.25s ease,
-    color 0.25s ease;
-}
-
-/* LUA */
-.app[data-theme="light"] .theme-toggle {
-  background: #ffffff;
-  border: 2px solid #111111;
-  color: #111111;
-}
-
-/* SOL */
-.app[data-theme="dark"] .theme-toggle {
-  background: #111111;
-  border: 2px solid #ffffff;
-  color: #ffffff;
-}
-
-.theme-toggle:hover {
-  transform: scale(1.06);
-}
-
-.app[data-theme="dark"] .moon-icon {
-  opacity: 0;
-
-  transform: translate(-50%, -50%) translate(3px, -2px) scale(0.6) rotate(90deg);
-}
-
-.app[data-theme="dark"] .moon-icon::after {
-  opacity: 0;
-  transform: scale(0.6);
-}
-
-.app[data-theme="dark"] .sun-icon {
-  opacity: 1;
-  transform: scale(1) rotate(0deg);
-}
-
-.moon-icon {
-  position: absolute;
-
-  top: 45%;
-  left: 80%;
-
-  width: 30px;
-  height: 30px;
-
-  border-radius: 50%;
-
-  background: transparent;
-
-  box-shadow: -10px 3px 0 0 #111111;
-
-  opacity: 1;
-
-  transform: translate(-50%, -50%) translate(3px, -2px) scale(1) rotate(0deg);
-
-  transition:
-    opacity 0.4s ease,
-    transform 0.4s ease;
-}
-
-.sun-icon {
-  position: absolute;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #ffffff;
-
-  font-size: 40px;
-  line-height: 1;
-
-  opacity: 0;
-
-  transform: scale(0.6) rotate(-90deg);
-
-  transition:
-    opacity 0.35s ease,
-    transform 0.35s ease;
-}
+/* =========================================
+   SCROLL
+========================================= */
 
 html {
   scroll-behavior: smooth;
+
   scroll-snap-type: y proximity;
 }
 
@@ -164,5 +49,288 @@ section {
   min-height: 100vh;
 
   scroll-snap-align: start;
+
   scroll-snap-stop: always;
+}
+
+/* =========================================
+   GRUPO DE AÇÕES GLOBAIS
+========================================= */
+
+.global-actions {
+  position: fixed;
+
+  right: 24px;
+  bottom: 24px;
+
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+/* =========================================
+   ESTILO NEUMÓRFICO GLOBAL
+========================================= */
+
+.global-action-button {
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  padding: 0;
+
+  background-color: #e0e0e0;
+
+  border: 2px solid rgb(206, 206, 206);
+
+  border-radius: 50%;
+
+  box-shadow:
+    inset 4px 4px 10px #bcbcbc,
+    inset -4px -4px 10px #ffffff;
+
+  color: #4d4d4d;
+
+  cursor: pointer;
+
+  text-decoration: none;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.global-action-button:hover {
+  box-shadow:
+    inset 2px 2px 5px #bcbcbc,
+    inset -2px -2px 5px #ffffff,
+    2px 2px 5px #bcbcbc,
+    -2px -2px 5px #ffffff;
+}
+
+.global-action-button:focus {
+  outline: none;
+
+  box-shadow:
+    inset 2px 2px 5px #bcbcbc,
+    inset -2px -2px 5px #ffffff,
+    2px 2px 5px #bcbcbc,
+    -2px -2px 5px #ffffff;
+}
+
+/* =========================================
+   ÍCONES SVG
+========================================= */
+
+.global-action-button svg {
+  width: 27px;
+  height: 27px;
+
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 2;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+
+  pointer-events: none;
+}
+
+/* =========================================
+   FOCO
+========================================= */
+
+.global-action-button:focus-visible {
+  outline: 2px solid #7c5ce7;
+
+  outline-offset: 4px;
+}
+
+/* =========================================
+   TEMA
+========================================= */
+
+.theme-toggle {
+  position: fixed;
+
+  top: 24px;
+  right: 24px;
+
+  z-index: 9999;
+}
+
+/* =========================================
+   WRAPPER ÍCONE TEMA
+========================================= */
+
+.theme-icon-wrapper {
+  position: relative;
+
+  width: 30px;
+
+  height: 30px;
+
+  display: block;
+
+  pointer-events: none;
+}
+
+/* =========================================
+   LUA
+========================================= */
+
+.moon-icon {
+  position: absolute;
+
+  top: 50%;
+
+  left: 50%;
+
+  width: 21px;
+
+  height: 21px;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  box-shadow: -7px 2px 0 0 currentColor;
+
+  opacity: 1;
+
+  transform: translate(-38%, -50%) rotate(0deg);
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* =========================================
+   SOL
+========================================= */
+
+.sun-icon {
+  position: absolute;
+
+  top: 50%;
+
+  left: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: currentColor;
+
+  font-size: 29px;
+
+  line-height: 1;
+
+  opacity: 0;
+
+  transform: translate(-50%, -50%) scale(0.6) rotate(-90deg);
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* =========================================
+   ÍCONE DO TEMA ESCURO
+========================================= */
+
+.app[data-theme="dark"] .moon-icon {
+  opacity: 0;
+
+  transform: translate(-38%, -50%) scale(0.6) rotate(90deg);
+}
+
+.app[data-theme="dark"] .sun-icon {
+  opacity: 1;
+
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+}
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+.app[data-theme="dark"] .global-action-button {
+  background-color: #2b2b2b;
+
+  border: 2px solid #2b2b2b;
+
+  color: #e8e8e8;
+
+  box-shadow:
+    inset 4px 4px 10px #171717,
+    inset -4px -4px 10px #3f3f3f;
+}
+
+.app[data-theme="dark"] .global-action-button:hover {
+  border-color: #444444;
+
+  background-color: #343434;
+
+  box-shadow:
+    inset 2px 2px 6px #0d0d0d,
+    inset -2px -2px 6px #555555,
+    5px 5px 12px #0d0d0d,
+    -0 -0 12px #555555;
+
+  color: #ffffff;
+}
+
+.app[data-theme="dark"] .global-action-button:focus-visible {
+  outline: 2px solid #777777;
+  outline-offset: 4px;
+}
+
+.app[data-theme="dark"] .global-action-button:active {
+  color: #bbbbbb;
+
+  box-shadow:
+    inset 4px 4px 12px #111111,
+    inset -4px -4px 12px #373737;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+  .global-actions {
+    right: 16px;
+
+    bottom: 16px;
+
+    gap: 10px;
+  }
+
+  .global-action-button {
+    width: 52px;
+
+    height: 52px;
+
+    flex-basis: 52px;
+
+    border-radius: 10px;
+  }
+
+  .global-action-button svg {
+    width: 24px;
+
+    height: 24px;
+  }
 }

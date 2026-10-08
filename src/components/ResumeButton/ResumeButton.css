@@ -1,0 +1,15 @@
+.resume-button {
+  flex: 0 0 60px;
+}
+
+.resume-button svg {
+  width: 27px;
+
+  height: 27px;
+}
+
+@media (max-width: 700px) {
+  .resume-button {
+    flex-basis: 52px;
+  }
+}
