@@ -16,6 +16,7 @@ type HeroProps = {
   forceLoading?: boolean;
   theme: "light" | "dark";
   isActive: boolean;
+  preloadReady?: boolean;
 };
 
 type HeroContentProps = {
@@ -75,6 +76,7 @@ export default function Hero({
   forceLoading = false,
   theme,
   isActive,
+  preloadReady = true,
 }: HeroProps) {
   const [assetsReady, setAssetsReady] = useState(false);
 
@@ -123,9 +125,10 @@ export default function Hero({
    *
    * 1. Assets carregaram.
    * 2. Tempo mínimo terminou.
-   * 3. forceLoading está desligado.
+   * 3. Preload global (ASCII) terminou.
+   * 4. forceLoading está desligado.
    */
-  const showHero = assetsReady && minimumLoadingDone && !forceLoading;
+  const showHero = assetsReady && minimumLoadingDone && preloadReady;
 
   /*
    * Avisa o App quando o Hero estiver pronto.

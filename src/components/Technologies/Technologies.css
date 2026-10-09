@@ -228,8 +228,6 @@
 ============================== */
 
 .technology-terminal-command {
-  margin-bottom: 24px;
-
   color: #dedede;
 
   font-size: 13px;
@@ -259,48 +257,29 @@
 ============================== */
 
 .technology-terminal-ascii-container {
-  width: 100%;
+  display: inline-block;
 
-  max-height: 190px;
+  width: fit-content;
+  height: fit-content;
 
-  margin-bottom: 22px;
-
-  overflow: hidden;
+  padding: 0;
+  margin: 0;
 }
 
 .technology-terminal-ascii {
+  display: block;
+
+  width: fit-content;
+  height: fit-content;
+
   margin: 0;
   padding: 0;
 
-  width: max-content;
-
-  background: transparent;
-
-  border: none;
-
-  color: #e2e2e2;
-
-  font-family: "Courier New", Courier, monospace;
-
-  /*
-   * Mantemos muitos caracteres
-   * para preservar o detalhe,
-   * mas reduzimos apenas o tamanho
-   * visual da arte.
-   */
-  font-size: 2px;
-
-  font-weight: 700;
-
-  line-height: 0.95;
-
-  letter-spacing: 0;
+  font-family: monospace;
 
   white-space: pre;
 
-  user-select: none;
-
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.14);
+  line-height: 1;
 }
 
 /* ==============================

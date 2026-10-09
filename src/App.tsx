@@ -23,6 +23,8 @@ import {
 
 import { ThemeButton } from "./components/ThemeButton/ThemeButton";
 
+import { preloadTechnologyAscii } from "./components/Technologies/TechnologyAsciiCache";
+
 const FORCE_LOADING = false;
 
 type Theme = "light" | "dark";
@@ -30,12 +32,27 @@ type Theme = "light" | "dark";
 export default function App() {
   const [heroReady, setHeroReady] = useState(false);
 
+  const [asciiReady, setAsciiReady] = useState(false);
+
   const [theme, setTheme] = useState<Theme>("light");
 
   const [activeSection, setActiveSection] = useState<SectionName>("inicio");
 
   const handleHeroReady = useCallback(() => {
     setHeroReady(true);
+  }, []);
+
+  useEffect(() => {
+    preloadTechnologyAscii()
+      .then(() => {
+        setAsciiReady(true);
+      })
+      .catch((error) => {
+        console.error("Erro no preload dos ASCII:", error);
+
+        // Evita travar o site caso algum ASCII falhe.
+        setAsciiReady(true);
+      });
   }, []);
 
   function toggleTheme() {
@@ -109,6 +126,7 @@ export default function App() {
         <Hero
           onReady={handleHeroReady}
           forceLoading={FORCE_LOADING}
+          preloadReady={asciiReady}
           theme={theme}
           isActive={activeSection === "inicio"}
         />

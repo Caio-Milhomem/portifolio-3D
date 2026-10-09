@@ -15,239 +15,12 @@ import * as THREE from "three";
 import { TechnologyIcon3D } from "./TechnologyIcon3D";
 import { TechnologyIconPNG } from "./TechnologyIconPNG";
 import { AvatarModel } from "../three/AvatarModel";
-
+import { technologies, type Technology } from "./TechnologiesData";
+import {
+  fetchTechnologyAscii,
+  getTechnologyAscii,
+} from "./TechnologyAsciiCache";
 import "./Technologies.css";
-
-type Technology = {
-  id: string;
-  name: string;
-  icon: string;
-  icon3D: string;
-  iconScale?: number;
-  asciiFile?: string;
-  text: string;
-};
-
-const technologies: Technology[] = [
-  {
-    id: "azure",
-    name: "Azure",
-    icon: "/icons/azure-icon.svg",
-    icon3D: "/icons/azure-icon.png",
-    asciiFile: "/ascii-icons/azure.txt",
-    text: `
-Descreva aqui sua experiência com Azure.
-    `,
-  },
-
-  {
-    id: "bootstrap",
-    name: "Bootstrap",
-    icon: "/icons/bootstrap-icon.png",
-    icon3D: "/icons/bootstrap-icon.png",
-    text: `
-Descreva aqui sua experiência com Bootstrap.
-    `,
-  },
-
-  {
-    id: "cpp",
-    name: "C++",
-    icon: "/icons/cpp-icon.svg",
-    icon3D: "/icons/cpp-icon.svg",
-    text: `
-Descreva aqui sua experiência com C++.
-    `,
-  },
-
-  {
-    id: "css",
-    name: "CSS",
-    icon: "/icons/css-icon.svg",
-    icon3D: "/icons/css-icon.svg",
-    text: `
-Descreva aqui sua experiência com CSS.
-    `,
-  },
-
-  {
-    id: "docker",
-    name: "Docker",
-    icon: "/icons/docker-icon.svg",
-    icon3D: "/icons/docker-icon.svg",
-    text: `
-Descreva aqui sua experiência com Docker.
-    `,
-  },
-
-  {
-    id: "git",
-    name: "Git",
-    icon: "/icons/git-icon.svg",
-    icon3D: "/icons/git-icon.svg",
-    text: `
-Descreva aqui sua experiência com Git.
-    `,
-  },
-
-  {
-    id: "github",
-    name: "GitHub",
-    icon: "/icons/github-icon.svg",
-    icon3D: "/icons/github-icon.svg",
-    text: `
-Descreva aqui sua experiência com GitHub.
-    `,
-  },
-
-  {
-    id: "html",
-    name: "HTML",
-    icon: "/icons/html-icon.svg",
-    icon3D: "/icons/html-icon.svg",
-    text: `
-Descreva aqui sua experiência com HTML.
-    `,
-  },
-
-  {
-    id: "java",
-    name: "Java",
-    icon: "/icons/java-icon.svg",
-    icon3D: "/icons/java-icon.svg",
-    text: `
-Descreva aqui sua experiência com Java.
-    `,
-  },
-
-  {
-    id: "javascript",
-    name: "JavaScript",
-    icon: "/icons/js-icon.svg",
-    icon3D: "/icons/js-icon.svg",
-    text: `
-Descreva aqui sua experiência com JavaScript.
-    `,
-  },
-
-  {
-    id: "mongodb",
-    name: "MongoDB",
-    icon: "/icons/mongodb-icon.svg",
-    icon3D: "/icons/mongodb-icon.svg",
-    text: `
-Descreva aqui sua experiência com MongoDB.
-    `,
-  },
-
-  {
-    id: "nodejs",
-    name: "Node.js",
-    icon: "/icons/node-js-icon.svg",
-    icon3D: "/icons/node-js-icon.svg",
-    text: `
-Descreva aqui sua experiência com Node.js.
-    `,
-  },
-
-  {
-    id: "npm",
-    name: "npm",
-    icon: "/icons/npm-icon.svg",
-    icon3D: "/icons/npm-icon.svg",
-    iconScale: 1.3,
-    text: `
-Descreva aqui sua experiência com npm.
-    `,
-  },
-
-  {
-    id: "postgresql",
-    name: "PostgreSQL",
-    icon: "/icons/postgre-icon.svg",
-    icon3D: "/icons/postgre-icon.svg",
-    text: `
-Descreva aqui sua experiência com PostgreSQL.
-    `,
-  },
-
-  {
-    id: "postman",
-    name: "Postman",
-    icon: "/icons/postman-icon.svg",
-    icon3D: "/icons/postman-icon.svg",
-    text: `
-Descreva aqui sua experiência com Postman.
-    `,
-  },
-
-  {
-    id: "prisma",
-    name: "Prisma",
-    icon: "/icons/prisma-icon.svg",
-    icon3D: "/icons/prisma-icon.svg",
-    text: `
-Descreva aqui sua experiência com Prisma.
-    `,
-  },
-
-  {
-    id: "react",
-    name: "React",
-    icon: "/icons/react-icon.svg",
-    icon3D: "/icons/react-icon.svg",
-    text: `
-Utilizo React para desenvolver interfaces modernas e componentizadas,
-trabalhando com estados, propriedades, hooks e organização de componentes.
-
-Tenho utilizado React principalmente no desenvolvimento de interfaces
-interativas e experiências web integradas com recursos 3D.
-    `,
-  },
-
-  {
-    id: "threejs",
-    name: "Three.js",
-    icon: "/icons/threejs-icon.svg",
-    icon3D: "/icons/threejs-icon.svg",
-    text: `
-Utilizo Three.js em conjunto com React Three Fiber para trabalhar com
-modelos, animações e experiências tridimensionais diretamente no navegador.
-    `,
-  },
-
-  {
-    id: "typescript",
-    name: "TypeScript",
-    icon: "/icons/typescript-icon.svg",
-    icon3D: "/icons/typescript-icon.svg",
-    text: `
-Utilizo TypeScript para adicionar tipagem ao desenvolvimento JavaScript,
-deixando componentes, propriedades e estruturas de dados mais previsíveis.
-    `,
-  },
-
-  {
-    id: "vite",
-    name: "Vite",
-    icon: "/icons/vite-icon.svg",
-    icon3D: "/icons/vite-icon.png",
-    text: `
-Descreva aqui sua experiência com Vite.
-    `,
-  },
-
-  {
-    id: "n8n",
-    name: "n8n",
-    icon: "/icons/n8n-icon.svg",
-    icon3D: "/icons/n8n-icon.svg",
-    iconScale: 1.9,
-    text: `
-Descreva aqui sua experiência com n8n.
-    `,
-  },
-];
 
 type TechnologiesProps = {
   isActive: boolean;
@@ -492,13 +265,11 @@ function TechnologyScene({
   );
 }
 
-export function Technologies({ isActive }: TechnologiesProps) {
+export function Technologies({ isActive: _isActive }: TechnologiesProps) {
   const [selectedTechnology, setSelectedTechnology] =
     useState<Technology | null>(null);
 
   const [isCardClosing, setIsCardClosing] = useState(false);
-
-  const [asciiArt, setAsciiArt] = useState("");
 
   /* ==============================
      INTERAÇÃO DA ICON CLOUD
@@ -529,6 +300,8 @@ export function Technologies({ isActive }: TechnologiesProps) {
     x: 0,
     y: 0,
   });
+
+  const [asciiArt, setAsciiArt] = useState("");
 
   /* ==============================
      CARD
@@ -593,21 +366,28 @@ export function Technologies({ isActive }: TechnologiesProps) {
   useEffect(() => {
     if (!selectedTechnology?.asciiFile) {
       setAsciiArt("");
+
       return;
     }
 
+    const asciiFile = selectedTechnology.asciiFile;
+
+    const cachedAscii = getTechnologyAscii(asciiFile);
+
+    if (cachedAscii) {
+      setAsciiArt(cachedAscii);
+
+      return;
+    }
+
+    /*
+     * Fallback: normalmente não será necessário,
+     * porque os ASCII já são carregados durante
+     * a tela de loading inicial.
+     */
     setAsciiArt("");
 
-    fetch(selectedTechnology.asciiFile)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `Erro ao carregar ASCII: ${selectedTechnology.asciiFile}`,
-          );
-        }
-
-        return response.text();
-      })
+    fetchTechnologyAscii(asciiFile)
       .then((text) => {
         setAsciiArt(text);
       })
@@ -869,7 +649,12 @@ export function Technologies({ isActive }: TechnologiesProps) {
 
               <div className="technology-terminal-result">
                 <div className="technology-terminal-ascii-container">
-                  <pre className="technology-terminal-ascii">
+                  <pre
+                    className="technology-terminal-ascii"
+                    style={{
+                      fontSize: `${selectedTechnology.asciiFontSize ?? 1}px`,
+                    }}
+                  >
                     {asciiArt || `[ ${selectedTechnology.name} ]`}
                   </pre>
                 </div>
