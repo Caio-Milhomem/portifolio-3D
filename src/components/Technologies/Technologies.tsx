@@ -252,6 +252,7 @@ function TechnologyScene({
                       <TechnologyIcon3D
                         src={technology.icon3D}
                         scale={0.004 * (technology.iconScale ?? 1)}
+                        outline={technology.iconOutline}
                       />
                     )}
                   </group>

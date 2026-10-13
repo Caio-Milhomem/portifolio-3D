@@ -6,6 +6,7 @@ import * as THREE from "three";
 type TechnologyIcon3DProps = {
   src: string;
   scale?: number;
+  outline?: boolean;
 };
 
 const EXTRUDE_SETTINGS: THREE.ExtrudeGeometryOptions = {
@@ -18,6 +19,7 @@ const REFERENCE_SIZE = 128;
 export const TechnologyIcon3D = memo(function TechnologyIcon3D({
   src,
   scale = 0.008,
+  outline = false,
 }: TechnologyIcon3DProps) {
   const svg = useLoader(SVGLoader, src);
 
@@ -51,6 +53,7 @@ export const TechnologyIcon3D = memo(function TechnologyIcon3D({
     });
 
     const size = new THREE.Vector3();
+
     const center = new THREE.Vector3();
 
     boundingBox.getSize(size);
@@ -71,16 +74,46 @@ export const TechnologyIcon3D = memo(function TechnologyIcon3D({
     <group
       scale={[
         scale * iconData.normalizeScale,
+
         -scale * iconData.normalizeScale,
+
         scale * iconData.normalizeScale,
       ]}
       rotation={[0, 0.22, 0]}
     >
+      {/* ============================
+          CONTORNO 3D
+      ============================ */}
+
+      {outline && (
+        <group scale={1.02}>
+          {iconData.parts.map((part, index) => (
+            <mesh
+              key={`outline-${index}`}
+              geometry={part.geometry}
+              position={[-iconData.center.x, -iconData.center.y, part.z]}
+              renderOrder={0}
+            >
+              <meshBasicMaterial
+                color="#8a8f98"
+                side={THREE.BackSide}
+                depthWrite={false}
+              />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* ============================
+          ÍCONE ORIGINAL
+      ============================ */}
+
       {iconData.parts.map((part, index) => (
         <mesh
           key={index}
           geometry={part.geometry}
           position={[-iconData.center.x, -iconData.center.y, part.z]}
+          renderOrder={1}
         >
           <meshStandardMaterial
             color={part.color}

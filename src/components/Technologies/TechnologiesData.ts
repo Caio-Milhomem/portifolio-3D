@@ -6,6 +6,7 @@ export type Technology = {
   iconScale?: number;
   asciiFile?: string;
   asciiFontSize?: number;
+  iconOutline?: boolean;
   text: string;
 };
 
@@ -28,7 +29,7 @@ Descreva aqui sua experiência com Azure.
     icon: "/icons/bootstrap-icon.png",
     icon3D: "/icons/bootstrap-icon.png",
     asciiFile: "/ascii-icons/bootstrap.txt",
-    asciiFontSize: 3,
+    asciiFontSize: 2.5,
     text: `
 Descreva aqui sua experiência com Bootstrap.
     `,
@@ -40,7 +41,7 @@ Descreva aqui sua experiência com Bootstrap.
     icon: "/icons/cpp-icon.svg",
     icon3D: "/icons/cpp-icon.svg",
     asciiFile: "/ascii-icons/cpp.txt",
-    asciiFontSize: 2,
+    asciiFontSize: 2.5,
     text: `
 Descreva aqui sua experiência com C++.
     `,
@@ -89,6 +90,7 @@ Descreva aqui sua experiência com Git.
     icon3D: "/icons/github-icon.svg",
     asciiFile: "/ascii-icons/github.txt",
     asciiFontSize: 2,
+    iconOutline: true,
     text: `
 Descreva aqui sua experiência com GitHub.
     `,
@@ -100,7 +102,7 @@ Descreva aqui sua experiência com GitHub.
     icon: "/icons/html-icon.svg",
     icon3D: "/icons/html-icon.svg",
     asciiFile: "/ascii-icons/html.txt",
-    asciiFontSize: 2,
+    asciiFontSize: 2.5,
     text: `
 Descreva aqui sua experiência com HTML.
     `,
@@ -124,6 +126,7 @@ Descreva aqui sua experiência com Java.
     icon: "/icons/js-icon.svg",
     icon3D: "/icons/js-icon.svg",
     asciiFile: "/ascii-icons/js.txt",
+    asciiFontSize: 1.5,
     text: `
 Descreva aqui sua experiência com JavaScript.
     `,
@@ -135,7 +138,7 @@ Descreva aqui sua experiência com JavaScript.
     icon: "/icons/mongodb-icon.svg",
     icon3D: "/icons/mongodb-icon.svg",
     asciiFile: "/ascii-icons/mongodb.txt",
-    asciiFontSize: 2,
+    asciiFontSize: 2.5,
     text: `
 Descreva aqui sua experiência com MongoDB.
     `,
@@ -159,7 +162,8 @@ Descreva aqui sua experiência com Node.js.
     icon: "/icons/npm-icon.svg",
     icon3D: "/icons/npm-icon.svg",
     asciiFile: "/ascii-icons/npm.txt",
-    iconScale: 2,
+    asciiFontSize: 4,
+    iconScale: 1.5,
     text: `
 Descreva aqui sua experiência com npm.
     `,
@@ -171,6 +175,7 @@ Descreva aqui sua experiência com npm.
     icon: "/icons/postgre-icon.svg",
     icon3D: "/icons/postgre-icon.svg",
     asciiFile: "/ascii-icons/postgresql.txt",
+    asciiFontSize: 3,
     text: `
 Descreva aqui sua experiência com PostgreSQL.
     `,
@@ -182,6 +187,7 @@ Descreva aqui sua experiência com PostgreSQL.
     icon: "/icons/postman-icon.svg",
     icon3D: "/icons/postman-icon.svg",
     asciiFile: "/ascii-icons/postman.txt",
+    asciiFontSize: 3,
     text: `
 Descreva aqui sua experiência com Postman.
     `,
@@ -193,6 +199,8 @@ Descreva aqui sua experiência com Postman.
     icon: "/icons/prisma-icon.svg",
     icon3D: "/icons/prisma-icon.svg",
     asciiFile: "/ascii-icons/prisma.txt",
+    asciiFontSize: 1.5,
+    iconOutline: true,
     text: `
 Descreva aqui sua experiência com Prisma.
     `,
@@ -204,6 +212,7 @@ Descreva aqui sua experiência com Prisma.
     icon: "/icons/react-icon.svg",
     icon3D: "/icons/react-icon.svg",
     asciiFile: "/ascii-icons/react.txt",
+    asciiFontSize: 1.5,
     text: `
 Utilizo React para desenvolver interfaces modernas e componentizadas,
 trabalhando com estados, propriedades, hooks e organização de componentes.
@@ -219,6 +228,8 @@ interativas e experiências web integradas com recursos 3D.
     icon: "/icons/threejs-icon.svg",
     icon3D: "/icons/threejs-icon.svg",
     asciiFile: "/ascii-icons/threejs.txt",
+    asciiFontSize: 3,
+    iconOutline: true,
     text: `
 Utilizo Three.js em conjunto com React Three Fiber para trabalhar com
 modelos, animações e experiências tridimensionais diretamente no navegador.
@@ -231,6 +242,7 @@ modelos, animações e experiências tridimensionais diretamente no navegador.
     icon: "/icons/typescript-icon.svg",
     icon3D: "/icons/typescript-icon.svg",
     asciiFile: "/ascii-icons/typescript.txt",
+    asciiFontSize: 1.3,
     text: `
 Utilizo TypeScript para adicionar tipagem ao desenvolvimento JavaScript,
 deixando componentes, propriedades e estruturas de dados mais previsíveis.
@@ -243,6 +255,7 @@ deixando componentes, propriedades e estruturas de dados mais previsíveis.
     icon: "/icons/vite-icon.svg",
     icon3D: "/icons/vite-icon.png",
     asciiFile: "/ascii-icons/vite.txt",
+    asciiFontSize: 1.5,
     text: `
 Descreva aqui sua experiência com Vite.
     `,
@@ -254,7 +267,9 @@ Descreva aqui sua experiência com Vite.
     icon: "/icons/n8n-icon.svg",
     icon3D: "/icons/n8n-icon.svg",
     asciiFile: "/ascii-icons/n8n.txt",
+    asciiFontSize: 3,
     iconScale: 1.9,
+    iconOutline: true,
     text: `
 Descreva aqui sua experiência com n8n.
     `,
