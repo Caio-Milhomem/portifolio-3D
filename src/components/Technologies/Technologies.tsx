@@ -266,7 +266,7 @@ function TechnologyScene({
   );
 }
 
-export function Technologies({ isActive: _isActive }: TechnologiesProps) {
+export function Technologies({ isActive }: TechnologiesProps) {
   const [selectedTechnology, setSelectedTechnology] =
     useState<Technology | null>(null);
 
@@ -579,7 +579,7 @@ export function Technologies({ isActive: _isActive }: TechnologiesProps) {
       >
         <Canvas
           dpr={1}
-          frameloop="always"
+          frameloop={isActive ? "always" : "demand"}
           camera={{
             position: [0, 1.4, 6.5],
             fov: 45,

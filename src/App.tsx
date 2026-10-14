@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
+import { useProgress } from "@react-three/drei";
 
 import "./App.css";
 
@@ -23,41 +25,158 @@ import {
 
 import { ThemeButton } from "./components/ThemeButton/ThemeButton";
 
-import { preloadTechnologyAscii } from "./components/Technologies/TechnologyAsciiCache";
+import { preloadSiteAssets } from "./components/loading/PreloadSiteAssets";
 
 const FORCE_LOADING = false;
 
 type Theme = "light" | "dark";
 
 export default function App() {
-  const [heroReady, setHeroReady] = useState(false);
-
-  const [asciiReady, setAsciiReady] = useState(false);
+  /* ==============================
+     TEMA / NAVEGAÇÃO
+  ============================== */
 
   const [theme, setTheme] = useState<Theme>("light");
 
   const [activeSection, setActiveSection] = useState<SectionName>("inicio");
 
-  const handleHeroReady = useCallback(() => {
-    setHeroReady(true);
-  }, []);
+  /* ==============================
+     LOADING GLOBAL
+  ============================== */
+
+  const [staticAssetsReady, setStaticAssetsReady] = useState(false);
+
+  const [minimumLoadingDone, setMinimumLoadingDone] = useState(false);
+
+  const [threeLoadingStarted, setThreeLoadingStarted] = useState(false);
+
+  /*
+   * Depois que siteReady vira true,
+   * nunca volta para false.
+   */
+  const [siteReady, setSiteReady] = useState(false);
+
+  /*
+   * useProgress observa o
+   * THREE.DefaultLoadingManager.
+   *
+   * Isso inclui loaders usados
+   * pelo Drei/Three.
+   */
+  const { active, loaded, total } = useProgress();
+
+  /* ==============================
+     ASSETS ESTÁTICOS
+  ============================== */
 
   useEffect(() => {
-    preloadTechnologyAscii()
+    let cancelled = false;
+
+    preloadSiteAssets()
       .then(() => {
-        setAsciiReady(true);
+        if (cancelled) {
+          return;
+        }
+
+        setStaticAssetsReady(true);
       })
       .catch((error) => {
-        console.error("Erro no preload dos ASCII:", error);
-
-        // Evita travar o site caso algum ASCII falhe.
-        setAsciiReady(true);
+        /*
+         * Como a regra agora é:
+         *
+         * "só libera se TUDO
+         * carregou",
+         *
+         * não marcamos ready
+         * em caso de erro.
+         */
+        console.error("Erro no preload do site:", error);
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
+  /* ==============================
+     THREE COMEÇOU A CARREGAR
+  ============================== */
+
+  useEffect(() => {
+    if (total > 0) {
+      setThreeLoadingStarted(true);
+    }
+  }, [total]);
+
+  const threeReady =
+    threeLoadingStarted && !active && total > 0 && loaded >= total;
+
+  /* ==============================
+     TEMPO MÍNIMO DO LOADING
+  ============================== */
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setMinimumLoadingDone(true);
+    }, 1800);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, []);
+
+  /* ==============================
+     SITE PRONTO
+  ============================== */
+
+  useEffect(() => {
+    if (siteReady) {
+      return;
+    }
+
+    if (!staticAssetsReady || !threeReady || !minimumLoadingDone) {
+      return;
+    }
+
+    setSiteReady(true);
+  }, [staticAssetsReady, threeReady, minimumLoadingDone, siteReady]);
+
+  const canShowSite = siteReady && !FORCE_LOADING;
+
+  /* ==============================
+     TRAVA SCROLL DURANTE LOADING
+  ============================== */
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+
+    if (!canShowSite) {
+      document.body.style.overflow = "hidden";
+
+      window.scrollTo({
+        top: 0,
+        left: 0,
+      });
+    } else {
+      document.body.style.overflow = previousOverflow;
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [canShowSite]);
+
+  /* ==============================
+     TEMA
+  ============================== */
+
   function toggleTheme() {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    setTheme((current) => (current === "light" ? "dark" : "light"));
   }
+
+  /* ==============================
+     SEÇÃO ATIVA
+  ============================== */
 
   useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>("section[id]");
@@ -100,14 +219,12 @@ export default function App() {
           INTERFACE GLOBAL
       ============================ */}
 
-      {heroReady && !FORCE_LOADING && (
+      {canShowSite && (
         <>
           <SideMenu />
 
-          {/* TEMA - CANTO SUPERIOR DIREITO */}
           <ThemeButton theme={theme} onToggle={toggleTheme} />
 
-          {/* DOWNLOAD + AJUDA - CANTO INFERIOR DIREITO */}
           <div className="global-actions">
             <ResumeButton />
 
@@ -120,37 +237,49 @@ export default function App() {
 
       {/* ============================
           HERO
+
+          Continua sendo onde a
+          tela de loading aparece.
       ============================ */}
 
       <section id="inicio">
         <Hero
-          onReady={handleHeroReady}
           forceLoading={FORCE_LOADING}
-          preloadReady={asciiReady}
           theme={theme}
-          isActive={activeSection === "inicio"}
+          isActive={canShowSite && activeSection === "inicio"}
+          preloadReady={canShowSite}
         />
       </section>
 
       {/* ============================
-          DEMAIS SEÇÕES
+          ABOUT
+
+          IMPORTANTE:
+          já existe desde o começo.
+          Não precisa estar ativo.
       ============================ */}
 
-      {heroReady && !FORCE_LOADING && (
-        <>
-          <section id="sobre">
-            <About />
-          </section>
+      <section id="sobre">
+        <About />
+      </section>
 
-          <section id="tecnologias">
-            <Technologies isActive={activeSection === "tecnologias"} />
-          </section>
+      {/* ============================
+          TECNOLOGIAS
+      ============================ */}
 
-          <section id="contato">
-            <Contact />
-          </section>
-        </>
-      )}
+      <section id="tecnologias">
+        <Technologies
+          isActive={canShowSite && activeSection === "tecnologias"}
+        />
+      </section>
+
+      {/* ============================
+          CONTACT
+      ============================ */}
+
+      <section id="contato">
+        <Contact />
+      </section>
     </main>
   );
 }
