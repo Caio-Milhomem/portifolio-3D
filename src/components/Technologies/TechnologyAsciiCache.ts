@@ -1,67 +1,127 @@
 import { technologies } from "./TechnologiesData";
 
+/* ==============================
+   CACHE GLOBAL DOS ASCII
+============================== */
+
+/*
+ * O Map fica no módulo.
+ *
+ * Portanto o conteúdo continua
+ * disponível enquanto a aplicação
+ * estiver aberta.
+ */
 const asciiCache = new Map<string, string>();
-const asciiRequests = new Map<string, Promise<string>>();
 
-let preloadPromise: Promise<void> | null = null;
+/*
+ * Guarda carregamentos que já
+ * estão acontecendo.
+ *
+ * Evita duas requisições para o
+ * mesmo arquivo ao mesmo tempo.
+ */
+const pendingLoads = new Map<string, Promise<string>>();
 
-async function loadAscii(asciiFile: string) {
-  const cached = asciiCache.get(asciiFile);
+/* ==============================
+   CARREGA UM ASCII
+============================== */
+
+async function loadAsciiFile(file: string): Promise<string> {
+  /* ============================
+     JÁ ESTÁ NO CACHE
+  ============================ */
+
+  const cached = asciiCache.get(file);
 
   if (cached !== undefined) {
     return cached;
   }
 
-  const existingRequest = asciiRequests.get(asciiFile);
+  /* ============================
+     JÁ ESTÁ SENDO CARREGADO
+  ============================ */
 
-  if (existingRequest) {
-    return existingRequest;
+  const pending = pendingLoads.get(file);
+
+  if (pending) {
+    return pending;
   }
 
-  const request = fetch(asciiFile)
+  /* ============================
+     NOVO CARREGAMENTO
+  ============================ */
+
+  const loadPromise = fetch(file, {
+    cache: "force-cache",
+  })
     .then((response) => {
       if (!response.ok) {
-        throw new Error(`Erro ao carregar ASCII: ${asciiFile}`);
+        throw new Error(`Erro ao carregar ASCII: ${file}`);
       }
 
       return response.text();
     })
     .then((text) => {
-      asciiCache.set(asciiFile, text);
-      asciiRequests.delete(asciiFile);
+      asciiCache.set(file, text);
+
+      pendingLoads.delete(file);
 
       return text;
     })
     .catch((error) => {
-      asciiRequests.delete(asciiFile);
+      pendingLoads.delete(file);
+
       throw error;
     });
 
-  asciiRequests.set(asciiFile, request);
+  pendingLoads.set(file, loadPromise);
 
-  return request;
+  return loadPromise;
 }
 
-export function preloadTechnologyAscii() {
-  if (preloadPromise) {
-    return preloadPromise;
-  }
+/* ==============================
+   PRELOAD DE TODOS OS ASCII
+============================== */
 
+export async function preloadTechnologyAscii() {
+  /*
+   * Pega somente tecnologias
+   * que realmente possuem ASCII.
+   */
   const asciiFiles = technologies
     .map((technology) => technology.asciiFile)
-    .filter((asciiFile): asciiFile is string => Boolean(asciiFile));
+    .filter((file): file is string => Boolean(file));
 
-  preloadPromise = Promise.all(
-    asciiFiles.map((asciiFile) => loadAscii(asciiFile)),
-  ).then(() => undefined);
+  /*
+   * Remove arquivos duplicados.
+   */
+  const uniqueFiles = [...new Set(asciiFiles)];
 
-  return preloadPromise;
+  /*
+   * Só termina quando TODOS os
+   * ASCII terminaram de carregar.
+   *
+   * Se um falhar, rejeita.
+   *
+   * Isso é importante porque o
+   * loading global não deve liberar
+   * o site enquanto faltar asset.
+   */
+  await Promise.all(uniqueFiles.map(loadAsciiFile));
 }
 
-export function getTechnologyAscii(asciiFile: string) {
-  return asciiCache.get(asciiFile);
+/* ==============================
+   BUSCA UM ASCII DO CACHE
+============================== */
+
+export function getTechnologyAscii(file: string): string | null {
+  return asciiCache.get(file) ?? null;
 }
 
-export function fetchTechnologyAscii(asciiFile: string) {
-  return loadAscii(asciiFile);
+/* ==============================
+   VERIFICA SE EXISTE NO CACHE
+============================== */
+
+export function hasTechnologyAscii(file: string): boolean {
+  return asciiCache.has(file);
 }

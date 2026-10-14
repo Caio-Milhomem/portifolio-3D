@@ -15,11 +15,11 @@ import * as THREE from "three";
 import { TechnologyIcon3D } from "./TechnologyIcon3D";
 import { TechnologyIconPNG } from "./TechnologyIconPNG";
 import { AvatarModel } from "../three/AvatarModel";
+
 import { technologies, type Technology } from "./TechnologiesData";
-import {
-  fetchTechnologyAscii,
-  getTechnologyAscii,
-} from "./TechnologyAsciiCache";
+
+import { getTechnologyAscii } from "./TechnologyAsciiCache";
+
 import "./Technologies.css";
 
 type TechnologiesProps = {
@@ -44,7 +44,9 @@ type CloudInteraction = {
 
 type TechnologySceneProps = {
   selectedTechnology: Technology | null;
+
   onSelect: (technology: Technology) => void;
+
   interaction: MutableRefObject<CloudInteraction>;
 };
 
@@ -54,6 +56,7 @@ function TechnologyScene({
   interaction,
 }: TechnologySceneProps) {
   const sceneGroup = useRef<THREE.Group>(null);
+
   const orbitGroup = useRef<THREE.Group>(null);
 
   /* ==============================
@@ -80,6 +83,7 @@ function TechnologyScene({
       orbitGroup.current.rotation.y += interaction.current.pendingRotationY;
 
       interaction.current.pendingRotationX = 0;
+
       interaction.current.pendingRotationY = 0;
 
       /* ==============================
@@ -316,6 +320,7 @@ export function Technologies({ isActive }: TechnologiesProps) {
      * Ignoramos animationend de elementos
      * filhos do card.
      */
+
     if (event.target !== event.currentTarget) {
       return;
     }
@@ -324,11 +329,13 @@ export function Technologies({ isActive }: TechnologiesProps) {
      * Só removemos o card quando a
      * animação de saída realmente terminar.
      */
+
     if (!isCardClosing || event.animationName !== "technologyCardExit") {
       return;
     }
 
     setSelectedTechnology(null);
+
     setIsCardClosing(false);
   }
 
@@ -344,6 +351,7 @@ export function Technologies({ isActive }: TechnologiesProps) {
      * Primeiro executamos a animação
      * de saída.
      */
+
     setIsCardClosing(true);
 
     document.body.style.cursor = "default";
@@ -355,6 +363,7 @@ export function Technologies({ isActive }: TechnologiesProps) {
      * durante o fechamento, cancela
      * a saída e mantém o card aberto.
      */
+
     setIsCardClosing(false);
 
     setSelectedTechnology(technology);
@@ -375,28 +384,24 @@ export function Technologies({ isActive }: TechnologiesProps) {
 
     const cachedAscii = getTechnologyAscii(asciiFile);
 
-    if (cachedAscii) {
-      setAsciiArt(cachedAscii);
+    /*
+     * O Technologies agora NÃO
+     * realiza fetch dos ASCII.
+     *
+     * Se o loading global terminou,
+     * o arquivo obrigatoriamente
+     * já deve estar no cache.
+     */
+
+    if (cachedAscii === null) {
+      console.error(`ASCII não encontrado no cache: ${asciiFile}`);
+
+      setAsciiArt(`[ ${selectedTechnology.name} ]`);
 
       return;
     }
 
-    /*
-     * Fallback: normalmente não será necessário,
-     * porque os ASCII já são carregados durante
-     * a tela de loading inicial.
-     */
-    setAsciiArt("");
-
-    fetchTechnologyAscii(asciiFile)
-      .then((text) => {
-        setAsciiArt(text);
-      })
-      .catch((error) => {
-        console.error(error);
-
-        setAsciiArt(`[ ${selectedTechnology.name} ]`);
-      });
+    setAsciiArt(cachedAscii);
   }, [selectedTechnology]);
 
   /* ==============================
@@ -409,6 +414,7 @@ export function Technologies({ isActive }: TechnologiesProps) {
     interaction.current.dragging = false;
 
     interaction.current.inertiaX = 0;
+
     interaction.current.inertiaY = 0;
 
     interaction.current.suppressClickUntil = 0;
@@ -460,6 +466,7 @@ export function Technologies({ isActive }: TechnologiesProps) {
     /*
      * Só vira drag depois de 6px.
      */
+
     if (!interaction.current.dragging && dragDistance < 6) {
       return;
     }
@@ -555,6 +562,7 @@ export function Technologies({ isActive }: TechnologiesProps) {
 
   function handleCloudPointerLeave() {
     interaction.current.hoverX = 0;
+
     interaction.current.hoverY = 0;
 
     if (!interaction.current.dragging) {
@@ -582,6 +590,7 @@ export function Technologies({ isActive }: TechnologiesProps) {
           frameloop={isActive ? "always" : "demand"}
           camera={{
             position: [0, 1.4, 6.5],
+
             fov: 45,
           }}
           onPointerMissed={() => {
