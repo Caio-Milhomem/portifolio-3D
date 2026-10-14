@@ -170,6 +170,62 @@
 }
 
 /* ==============================
+   CONFIRMAÇÃO S / N
+============================== */
+
+.terminal-window-confirm {
+  margin-top: 26px;
+
+  color: #b8b8b8;
+
+  font-family: "Courier New", Courier, monospace;
+
+  font-size: 13px;
+}
+
+.terminal-window-question {
+  margin-bottom: 12px;
+
+  line-height: 1.6;
+}
+
+.terminal-window-question span {
+  font-weight: 700;
+}
+
+.terminal-window-input-line {
+  display: flex;
+
+  align-items: center;
+
+  min-height: 24px;
+}
+
+.terminal-window-input-line input {
+  width: 22px;
+
+  margin-left: 7px;
+
+  padding: 0;
+
+  border: 0;
+
+  outline: 0;
+
+  background: transparent;
+
+  color: #f3f3f3;
+
+  font: inherit;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  caret-color: transparent;
+}
+
+/* ==============================
    ANIMAÇÕES
 ============================== */
 

@@ -1,98 +1,6 @@
 import { useEffect, useState } from "react";
+
 import "./TerminalWindow.css";
-
-type TechKeyButtonProps = {
-  iconSrc: string;
-
-  iconAlt?: string;
-
-  active?: boolean;
-
-  disabled?: boolean;
-
-  onClick?: () => void;
-};
-
-export function TechKeyButton({
-  iconSrc,
-  iconAlt = "",
-  active = false,
-  disabled = false,
-  onClick,
-}: TechKeyButtonProps) {
-  const [pressed, setPressed] = useState(false);
-
-  return (
-    <div
-      className={[
-        "tech-key",
-        active ? "tech-key--active" : "",
-        pressed ? "tech-key--pressed" : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      {/* ============================
-          GLOW EXTERNO
-      ============================ */}
-
-      <div className="tech-key-glow" />
-
-      {/* ============================
-          BASE
-      ============================ */}
-
-      <div className="tech-key-base">
-        <div className="tech-key-base-shine" />
-      </div>
-
-      {/* ============================
-          BOTÃO
-      ============================ */}
-
-      <button
-        type="button"
-        className="tech-key-button"
-        disabled={disabled}
-        onPointerDown={() => {
-          setPressed(true);
-        }}
-        onPointerUp={() => {
-          setPressed(false);
-        }}
-        onPointerLeave={() => {
-          setPressed(false);
-        }}
-        onPointerCancel={() => {
-          setPressed(false);
-        }}
-        onClick={onClick}
-      >
-        {/* ============================
-            CANTOS / REFLEXOS
-        ============================ */}
-
-        <div className="tech-key-corners" />
-
-        {/* ============================
-            SUPERFÍCIE INTERNA
-        ============================ */}
-
-        <div className="tech-key-inner">
-          <div className="tech-key-symbol">
-            <img src={iconSrc} alt={iconAlt} draggable={false} />
-          </div>
-        </div>
-      </button>
-
-      {/* ============================
-          LED
-      ============================ */}
-
-      <div className="tech-key-led" />
-    </div>
-  );
-}
 
 type TerminalWindowProps = {
   open: boolean;
@@ -105,24 +13,49 @@ type TerminalWindowProps = {
 
   text: string;
 
+  confirmAccentColor?: string;
+
   onClose?: () => void;
+
+  confirmQuestion?: string;
+
+  onConfirmYes?: () => void;
+
+  onConfirmNo?: () => void;
 };
 
 export function TerminalWindow({
   open,
+
   title = "terminal.exe",
+
   command,
+
   heading,
+
   text,
+
   onClose,
+
+  confirmQuestion,
+
+  confirmAccentColor,
+
+  onConfirmYes,
+
+  onConfirmNo,
 }: TerminalWindowProps) {
   const [typedText, setTypedText] = useState("");
+
+  const [answer, setAnswer] = useState("");
 
   /* ==============================
      TYPING
   ============================== */
 
   useEffect(() => {
+    setAnswer("");
+
     if (!open) {
       setTypedText("");
 
@@ -146,10 +79,32 @@ export function TerminalWindow({
     return () => {
       window.clearInterval(interval);
     };
-  }, [open, text]);
+  }, [open, text, command]);
 
   if (!open) {
     return null;
+  }
+
+  const typingFinished = typedText.length >= text.length;
+
+  function handleAnswer(value: string) {
+    const normalized = value.slice(-1).toUpperCase();
+
+    if (normalized === "" || normalized === "S" || normalized === "N") {
+      setAnswer(normalized);
+    }
+  }
+
+  function submitAnswer() {
+    if (answer === "S") {
+      onConfirmYes?.();
+
+      return;
+    }
+
+    if (answer === "N") {
+      onConfirmNo?.();
+    }
   }
 
   return (
@@ -202,15 +157,53 @@ export function TerminalWindow({
           <p>
             {typedText}
 
-            <span className="terminal-window-cursor">_</span>
+            {!typingFinished && (
+              <span className="terminal-window-cursor">_</span>
+            )}
           </p>
         </div>
 
-        {/* PROMPT */}
+        {/* ============================
+            CONFIRMAÇÃO
+        ============================ */}
 
-        <div className="terminal-window-prompt">
-          <span>{"C:\\portfolio>"}</span>
-        </div>
+        {typingFinished && confirmQuestion && (
+          <div className="terminal-window-confirm">
+            <div className="terminal-window-question">
+              {confirmQuestion} <span>[S/N]</span>
+            </div>
+
+            <div className="terminal-window-input-line">
+              <span className="terminal-window-path">{"C:\\portfolio>"}</span>
+
+              <input
+                autoFocus
+                type="text"
+                value={answer}
+                maxLength={1}
+                spellCheck={false}
+                autoComplete="off"
+                aria-label="Responder S ou N"
+                onChange={(event) => handleAnswer(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    submitAnswer();
+                  }
+                }}
+              />
+
+              {!answer && <span className="terminal-window-cursor">_</span>}
+            </div>
+          </div>
+        )}
+
+        {/* PROMPT NORMAL */}
+
+        {!confirmQuestion && (
+          <div className="terminal-window-prompt">
+            <span>{"C:\\portfolio>"}</span>
+          </div>
+        )}
       </div>
     </div>
   );

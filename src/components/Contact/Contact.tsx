@@ -1,175 +1,118 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-import { Canvas } from "@react-three/fiber";
+import { TechKeyButton } from "../ui/TechKeyButton/TechKeyButton";
 
-import { ContactScene, type ContactId } from "./ContactScene";
-import { AvatarModel } from "../three/AvatarModel";
+import { TerminalWindow } from "../ui/TerminalWindow/TerminalWindow";
+
+import { contacts, type ContactId } from "./ContactData";
+
 import "./Contact.css";
-
-type ContactItem = {
-  id: ContactId;
-  name: string;
-  icon: string;
-  text: string;
-  action: string;
-};
-
-const contacts: ContactItem[] = [
-  {
-    id: "whatsapp",
-
-    name: "WhatsApp",
-
-    icon: "/icons/whatsapp-icon.svg",
-
-    text: "Para conversas rápidas, propostas ou para trocar uma ideia diretamente comigo.",
-
-    action: "Abrir WhatsApp →",
-  },
-
-  {
-    id: "email",
-
-    name: "E-mail",
-
-    icon: "/icons/email-icon.svg",
-
-    text: "Para contatos profissionais, propostas, projetos ou assuntos que precisem de mais contexto.",
-
-    action: "Enviar e-mail →",
-  },
-
-  {
-    id: "linkedin",
-
-    name: "LinkedIn",
-
-    icon: "/icons/linkedin-icon.svg",
-
-    text: "Acompanhe meus projetos, experiências e entre em contato comigo pelo LinkedIn.",
-
-    action: "Abrir LinkedIn →",
-  },
-];
-
-/* ==============================
-   TYPING
-============================== */
-
-function TypingContactText({ text }: { text: string }) {
-  const [typedText, setTypedText] = useState("");
-
-  useEffect(() => {
-    let index = 0;
-
-    setTypedText("");
-
-    const interval = window.setInterval(() => {
-      index += 1;
-
-      setTypedText(text.slice(0, index));
-
-      if (index >= text.length) {
-        window.clearInterval(interval);
-      }
-    }, 18);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [text]);
-
-  return (
-    <p className="contact-info-text">
-      {typedText}
-
-      <span className="contact-typing-cursor">_</span>
-    </p>
-  );
-}
 
 /* ==============================
    CONTACT
 ============================== */
 
 export function Contact() {
-  const [openedContact, setOpenedContact] = useState<ContactId | null>(null);
+  const [activeContact, setActiveContact] = useState<ContactId | null>(null);
 
-  const selectedContact =
-    contacts.find((contact) => contact.id === openedContact) ?? null;
+  const selectedContact = activeContact
+    ? (contacts.find((contact) => contact.id === activeContact) ?? null)
+    : null;
 
-  function selectContact(id: ContactId) {
-    setOpenedContact((current) => (current === id ? null : id));
+  const isOpen = selectedContact !== null;
+
+  function toggleContact(id: ContactId) {
+    setActiveContact((current) => (current === id ? null : id));
   }
 
   function closeContact() {
-    setOpenedContact(null);
+    setActiveContact(null);
   }
 
   return (
-    <section className="contact" id="contact">
+    <section
+      className={`contact ${isOpen ? "contact--active" : "contact--idle"}`}
+      id="contact"
+      onClick={closeContact}
+    >
       {/* ============================
-          CANVAS ÚNICO
+          TERMINAL
       ============================ */}
 
-      <div className="contact-canvas">
-        <Canvas
-          dpr={1}
-          frameloop="always"
-          camera={{
-            position: [0, 0.8, 7.5],
+      <div
+        className={`contact-terminal ${
+          selectedContact ? `contact-terminal--${selectedContact.id}` : ""
+        }`}
+        onPointerDown={(event) => {
+          event.stopPropagation();
+        }}
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
+        {selectedContact && (
+          <TerminalWindow
+            key={selectedContact.id}
+            open
+            title="contact.exe"
+            command={selectedContact.command}
+            heading={selectedContact.name}
+            text={selectedContact.text}
+            confirmQuestion={`Digite S se quiser entrar em contato pelo ${selectedContact.name} ou N para voltar.`}
+            onConfirmYes={() => {
+              const href = selectedContact.href;
 
-            fov: 45,
-          }}
-          onPointerMissed={closeContact}
-          gl={{
-            alpha: true,
-            antialias: true,
-          }}
-        >
-          <ContactScene
-            contacts={contacts}
-            openedContact={openedContact}
-            onSelect={selectContact}
+              /*
+               * Primeiro volta a interface
+               * para o estado inicial.
+               *
+               * Isso também desmonta o
+               * TerminalWindow e zera todos
+               * os estados internos dele.
+               */
+              closeContact();
+
+              if (href.startsWith("mailto:")) {
+                window.location.href = href;
+
+                return;
+              }
+
+              window.open(href, "_blank", "noopener,noreferrer");
+            }}
+            onConfirmNo={() => {
+              closeContact();
+            }}
             onClose={closeContact}
           />
-        </Canvas>
+        )}
       </div>
 
       {/* ============================
-          CAMADA HTML
+          BOTÕES
       ============================ */}
 
-      <div className="contact-info-layer">
-        {selectedContact && (
+      <div
+        className="contact-key-list"
+        onPointerDown={(event) => {
+          event.stopPropagation();
+        }}
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
+        {contacts.map((contact) => (
           <div
-            key={selectedContact.id}
-            className={`
-              contact-info-panel
-              contact-info-panel--${selectedContact.id}
-            `}
-            onPointerDown={(event) => {
-              event.stopPropagation();
-            }}
-            onClick={(event) => {
-              event.stopPropagation();
-            }}
+            key={contact.id}
+            className={`contact-key-wrapper contact-key-wrapper--${contact.id}`}
           >
-            {/* TÍTULO */}
-
-            <h2>{selectedContact.name}</h2>
-
-            {/* TEXTO */}
-
-            <TypingContactText text={selectedContact.text} />
-
-            {/* AÇÃO */}
-
-            <span className="contact-info-action">
-              {selectedContact.action}
-            </span>
+            <TechKeyButton
+              icon={contact.icon}
+              active={activeContact === contact.id}
+              onClick={() => toggleContact(contact.id)}
+            />
           </div>
-        )}
+        ))}
       </div>
     </section>
   );
